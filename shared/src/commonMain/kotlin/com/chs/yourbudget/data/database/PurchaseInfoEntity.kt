@@ -23,6 +23,7 @@ data class PurchaseInfoEntity(
     val expenseIdx: Long,
     val title: String,
     val amount: Long,
+    val userName: String,
     val createAt: Long,
     val updateAt: Long?
 )

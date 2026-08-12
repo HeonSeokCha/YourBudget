@@ -1,2 +1,28 @@
 package com.chs.yourbudget.presentation
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.rememberNavBackStack
+import com.chs.yourbudget.di.KoinModule
+import org.koin.compose.KoinApplication
+import org.koin.plugin.module.dsl.koinConfiguration
+
+@Composable
+fun YourBudgetApp() {
+    KoinApplication(koinConfiguration<KoinModule>()) {
+        val backStack: SnapshotStateList<BudgetScreens> = remember {
+            mutableStateListOf(BudgetScreens.ScreenMain)
+        }
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            MainNavDisplay(backStack)
+        }
+    }
+}

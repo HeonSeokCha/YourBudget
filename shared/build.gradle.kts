@@ -54,8 +54,6 @@ kotlin {
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
 
 
             implementation(libs.koin.core)
@@ -63,6 +61,9 @@ kotlin {
 
             implementation(libs.koin.annotation)
             implementation(libs.bundles.room)
+
+            implementation(libs.bundles.android)
+
         }
     }
 }
