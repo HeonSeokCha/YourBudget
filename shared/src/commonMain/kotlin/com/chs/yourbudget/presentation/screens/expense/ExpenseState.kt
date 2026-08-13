@@ -1,3 +1,7 @@
 package com.chs.yourbudget.presentation.screens.expense
 
-data class ExpenseState()
+import com.chs.yourbudget.domain.model.ExpenseInfo
+
+data class ExpenseState(
+    val expenseList: List<ExpenseInfo>,
+)

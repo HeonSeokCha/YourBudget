@@ -21,9 +21,7 @@ data class PurchaseInfoEntity(
     @PrimaryKey(autoGenerate = true)
     val idx: Long = 0,
     val expenseIdx: Long,
-    val title: String,
-    val amount: Long,
     val userName: String,
-    val createAt: Long,
-    val updateAt: Long?
+    val amount: Long,
+    val createAt: Long
 )

@@ -64,6 +64,7 @@ kotlin {
 
             implementation(libs.bundles.android)
 
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0")
         }
     }
 }
