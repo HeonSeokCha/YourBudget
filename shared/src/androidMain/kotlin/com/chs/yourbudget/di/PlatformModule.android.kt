@@ -18,5 +18,4 @@ actual class PlatformModule {
             .setQueryCoroutineContext(Dispatchers.IO)
             .build()
     }
-
 }

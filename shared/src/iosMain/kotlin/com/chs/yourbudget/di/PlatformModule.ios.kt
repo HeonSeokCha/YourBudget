@@ -24,7 +24,7 @@ actual class PlatformModule {
             error = null
         ).run { requireNotNull(this?.path())}
 
-        val dbFile = "$documentDirectory/your_splash.db"
+        val dbFile = "$documentDirectory/your_budget.db"
         return Room.databaseBuilder<BudgetDatabase>(
             name = dbFile
         )
