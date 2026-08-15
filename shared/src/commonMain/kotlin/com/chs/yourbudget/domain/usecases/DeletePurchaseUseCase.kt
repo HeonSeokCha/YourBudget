@@ -1,4 +1,10 @@
 package com.chs.yourbudget.domain.usecases
 
-class DeletePurchaseUseCase {
+import com.chs.yourbudget.domain.BudgetRepository
+import org.koin.core.annotation.Single
+
+@Single
+class DeletePurchaseUseCase(
+    private val repository: BudgetRepository
+) {
 }
