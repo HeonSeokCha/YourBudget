@@ -5,9 +5,12 @@ import com.chs.yourbudget.data.database.PurchaseDao
 import com.chs.yourbudget.domain.BudgetRepository
 import com.chs.yourbudget.domain.model.ExpenseInfo
 import com.chs.yourbudget.domain.model.PurchaseInfo
+import com.chs.yourbudget.util.toMillis
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
 import org.koin.core.annotation.Single
+import kotlin.math.exp
 
 @Single
 class BudgetRepositoryImpl(
@@ -15,30 +18,37 @@ class BudgetRepositoryImpl(
     private val expenseDao: ExpenseDao
 ) : BudgetRepository {
     override suspend fun insertPurchase(purchaseInfo: PurchaseInfo) {
-        purchaseDao.upsertEntity()
+        purchaseDao.upsertEntity(purchaseInfo.toPurchaseInfoEntity())
     }
 
     override suspend fun deletePurchase(purchaseInfo: PurchaseInfo) {
-        TODO("Not yet implemented")
+        purchaseDao.deleteEntity(purchaseInfo.toPurchaseInfoEntity())
     }
 
     override suspend fun insertExpense(expenseInfo: ExpenseInfo) {
-        TODO("Not yet implemented")
+        expenseDao.upsertEntity(expenseInfo.toExpenseInfoEntity())
     }
 
     override suspend fun deleteExpense(expenseInfo: ExpenseInfo) {
-        TODO("Not yet implemented")
+        expenseDao.deleteEntity(expenseInfo.toExpenseInfoEntity())
     }
 
-    override fun getAllExpense(): Flow<List<ExpenseInfo>> {
-        TODO("Not yet implemented")
+    override fun getAllExpense(): Flow<Map<ExpenseInfo, List<PurchaseInfo>>> {
+        return expenseDao.getAllExpenseList().map {
+            it.map {
+                it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() }
+            }.toMap()
+        }
     }
 
-    override fun getDailyPurchaseList(targetDate: LocalDate): Flow<List<PurchaseInfo>> {
-        TODO("Not yet implemented")
+    override fun getDailyPurchaseList(targetDate: LocalDate): Flow<Pair<ExpenseInfo, List<PurchaseInfo>>> {
+        return expenseDao.getExpenseFromDate(targetDate.toMillis()).map {
+            it.firstNotNullOf { it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() } }
+        }
     }
 
-    override suspend fun getTotalAmount(userName: String): List<PurchaseInfo> {
-        TODO("Not yet implemented")
+    override suspend fun getTotalAmount(userName: String): Map<String, Long> {
+        return purchaseDao.getTotalAmountByUserName()
+
     }
 }

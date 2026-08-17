@@ -10,7 +10,7 @@ interface BudgetRepository {
     suspend fun deletePurchase(purchaseInfo: PurchaseInfo)
     suspend fun insertExpense(expenseInfo: ExpenseInfo)
     suspend fun deleteExpense(expenseInfo: ExpenseInfo)
-    fun getAllExpense(): Flow<List<ExpenseInfo>>
-    fun getDailyPurchaseList(targetDate: LocalDate): Flow<List<PurchaseInfo>>
-    suspend fun getTotalAmount(userName: String): List<PurchaseInfo>
+    fun getAllExpense(): Flow<Map<ExpenseInfo, List<PurchaseInfo>>>
+    fun getDailyPurchaseList(targetDate: LocalDate): Flow<Pair<ExpenseInfo, List<PurchaseInfo>>>
+    suspend fun getTotalAmount(userName: String): Map<String, Long>
 }
