@@ -20,18 +20,9 @@ abstract class PurchaseDao : BaseDao<PurchaseInfoEntity> {
         "userName"
     ) String, @MapColumn("totalMount") Long>>
 
-    @Query(
-        """
-         SELECT userName, SUM(amount) as totalAmount
-           FROM purchases_info
-           GROUP BY userName
-    """
-    )
-    abstract suspend fun getTotalAmountFromUser(): Map<@MapColumn("userName") String, @MapColumn("totalAmount") Long>
-
     @Query("""
         SELECT userName, SUM(amount) as totalAmount
-          FROM purchase_info
+          FROM purchases_info
           GROUP BY userName
     """)
     abstract suspend fun getTotalAmountByUserName(): Map<@MapColumn("userName") String, @MapColumn("totalAmount") Long>

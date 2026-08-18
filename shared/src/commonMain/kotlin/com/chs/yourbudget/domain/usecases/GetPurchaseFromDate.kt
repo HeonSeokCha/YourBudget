@@ -4,7 +4,7 @@ import com.chs.yourbudget.domain.BudgetRepository
 import org.koin.core.annotation.Single
 
 @Single
-class GetAllExpenseSummaryUseCase(
+class GetPurchaseFromDate(
     private val repository: BudgetRepository
 ) {
 }
