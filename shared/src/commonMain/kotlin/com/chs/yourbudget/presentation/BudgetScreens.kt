@@ -9,11 +9,8 @@ sealed interface BudgetScreens: NavKey {
     data object ScreenMain : BudgetScreens
 
     @Serializable
-    data class ScreenExpense(val targetDate: Long) : BudgetScreens
+    data class ScreenExpense(val expenseId: Long) : BudgetScreens
 
     @Serializable
-    data class ScreenPurchase(val expenseId: Long) : BudgetScreens
-
-    @Serializable
-    data object ScreenPurchaseCreate : BudgetScreens
+    data class ScreenPurchaseCreate(val expenseId: Long) : BudgetScreens
 }

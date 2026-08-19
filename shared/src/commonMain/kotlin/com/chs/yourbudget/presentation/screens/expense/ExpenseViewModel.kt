@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import com.chs.yourbudget.domain.usecases.GetAllExpenseUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.koin.core.annotation.InjectedParam
 import org.koin.core.annotation.KoinViewModel
 
 @KoinViewModel
 class ExpenseViewModel(
+    @InjectedParam private val expenseId: Long,
     private val getAllExpenseUseCase: GetAllExpenseUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(ExpenseState())

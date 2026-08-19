@@ -4,11 +4,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.chs.yourbudget.domain.model.ExpenseInfo
 import com.chs.yourbudget.presentation.common.ItemExpense
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    onClickExpense: (Long) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
