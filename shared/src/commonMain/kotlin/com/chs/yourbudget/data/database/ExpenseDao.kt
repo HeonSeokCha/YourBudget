@@ -6,19 +6,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class ExpenseDao : BaseDao<ExpenseInfoEntity> {
-    @Query("""
-        SELECT *
-          FROM expense_info as expense
-          LEFT JOIN purchases_info as purchase ON expense.idx = purchase.expenseIdx
-         WHERE expenseDate = :targetDate
-    """)
-    abstract fun getExpenseFromDate(targetDate: Long): Flow<Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>>
+    @Query("SELECT * FROM expense_info as expense")
+    abstract fun getAllExpenseList(): Flow<List<ExpenseInfoEntity>>
 
     @Query("""
         SELECT *
           FROM expense_info as expense
           LEFT JOIN purchases_info as purchase ON expense.idx = purchase.expenseIdx
+         WHERE expenseId = :expenseId
     """)
-    abstract fun getAllExpenseList(): Flow<Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>>
-
+    abstract suspend fun getExpenseInfo(expenseId: Long): Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>
 }

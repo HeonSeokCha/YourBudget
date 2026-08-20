@@ -33,22 +33,19 @@ class BudgetRepositoryImpl(
         expenseDao.deleteEntity(expenseInfo.toExpenseInfoEntity())
     }
 
-    override fun getAllExpense(): Flow<Map<ExpenseInfo, List<PurchaseInfo>>> {
+    override fun getAllExpense(): Flow<List<ExpenseInfo>> {
         return expenseDao.getAllExpenseList().map {
-            it.map {
-                it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() }
-            }.toMap()
+            it.map { it.toExpenseInfo() }
         }
     }
 
-    override fun getDailyPurchaseList(targetDate: LocalDate): Flow<Pair<ExpenseInfo, List<PurchaseInfo>>> {
-        return expenseDao.getExpenseFromDate(targetDate.toMillis()).map {
-            it.firstNotNullOf { it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() } }
-        }
+    override suspend fun getExpenseWithPurchaseInfo(expenseId: Long): Pair<ExpenseInfo, List<PurchaseInfo>> {
+        return expenseDao.getExpenseInfo(expenseId).map {
+            it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() }
+        }.single()
     }
 
-    override suspend fun getTotalAmount(userName: String): Map<String, Long> {
+    override suspend fun getTotalAmountByName(): Map<String, Long> {
         return purchaseDao.getTotalAmountByUserName()
-
     }
 }
