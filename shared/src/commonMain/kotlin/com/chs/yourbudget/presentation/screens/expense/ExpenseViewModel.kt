@@ -1,7 +1,6 @@
 package com.chs.yourbudget.presentation.screens.expense
 
 import androidx.lifecycle.ViewModel
-import com.chs.yourbudget.domain.usecases.GetExpenseUseCase
 import com.chs.yourbudget.domain.usecases.GetExpenseWithPurchaseListUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
