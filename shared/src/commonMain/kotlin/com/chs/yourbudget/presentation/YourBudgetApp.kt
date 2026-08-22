@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.rememberNavBackStack
 import com.chs.yourbudget.di.KoinModule
 import org.koin.compose.KoinApplication
 import org.koin.plugin.module.dsl.koinConfiguration

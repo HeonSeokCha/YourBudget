@@ -10,7 +10,7 @@ import org.koin.core.annotation.KoinViewModel
 @KoinViewModel
 class ExpenseViewModel(
     @InjectedParam private val expenseId: Long,
-    private val getExpenseUseCase: GetExpenseUseCase,
+    private val getExpenseUseCase: GetExpenseWithPurchaseListUseCase,
     private val getExpenseWithPurchaseListUseCase: GetExpenseWithPurchaseListUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(ExpenseState())

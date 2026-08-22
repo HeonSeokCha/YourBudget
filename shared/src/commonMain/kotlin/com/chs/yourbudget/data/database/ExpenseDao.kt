@@ -13,7 +13,7 @@ abstract class ExpenseDao : BaseDao<ExpenseInfoEntity> {
         SELECT *
           FROM expense_info as expense
           LEFT JOIN purchases_info as purchase ON expense.idx = purchase.expenseIdx
-         WHERE expenseId = :expenseId
+         WHERE expense.idx = :expenseId
     """)
     abstract suspend fun getExpenseInfo(expenseId: Long): Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>
 }
