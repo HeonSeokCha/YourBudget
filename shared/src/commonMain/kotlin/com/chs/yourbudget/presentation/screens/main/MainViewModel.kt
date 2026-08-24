@@ -40,6 +40,17 @@ class MainViewModel(
         _state.update { it.copy(isShowDateDialog = value) }
     }
 
+    fun changeDeleteDialogShow(value: Boolean) {
+        if (!value) {
+            _state.update { it.copy(targetExpenseInfo = null) }
+        }
+        _state.update { it.copy(isShowDeleteDialog = value) }
+    }
+
+    fun targetExpense(expenseInfo: ExpenseInfo) {
+        _state.update { it.copy(targetExpenseInfo = expenseInfo) }
+    }
+
     fun createExpense(targetDate: Long) {
         viewModelScope.launch {
             insertExpenseUseCase(
@@ -49,6 +60,19 @@ class MainViewModel(
                     createTime = Clock.System.now().toEpochMilliseconds().toLocalDateTime(),
                     updateTime = null
                 )
+            )
+        }
+    }
+
+    fun deleteExpense() {
+        if (_state.value.targetExpenseInfo == null) return
+        viewModelScope.launch {
+            deleteExpenseUseCase(_state.value.targetExpenseInfo!!)
+        }
+        _state.update {
+            it.copy(
+                targetExpenseInfo = null,
+                isShowDeleteDialog = false
             )
         }
     }

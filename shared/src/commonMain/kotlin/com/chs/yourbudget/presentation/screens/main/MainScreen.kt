@@ -10,11 +10,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chs.yourbudget.presentation.common.ItemExpense
-import androidx.compose.material3.Text
+import androidx.compose.material3
+
+.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.FloatingActionButton
@@ -40,7 +43,11 @@ fun MainScreen(
             items(state.expenseList) {
                 ItemExpense(
                     expenseInfo = it,
-                    onClick = onClickExpense
+                    onClick = onClickExpense,
+                    onLonClick = {
+                        viewModel.targetExpense(expenseInfo = it)
+                        viewModel.changeDeleteDialogShow(true)
+                    }
                 )
             }
         }
@@ -50,8 +57,8 @@ fun MainScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(
-                    bottom = 16.dp,
-                    end = 16.dp
+                    bottom = 8.dp,
+                    end = 8.dp
                 ),
         ) {
             Icon(
@@ -82,6 +89,25 @@ fun MainScreen(
             ) {
                 DatePicker(state = datePickerState)
             }
+        }
+
+        if (state.isShowDeleteDialog) {
+            AlertDialog(
+                onDismissRequest = { viewModel.changeDeleteDialogShow(false) },
+                confirmButton = {
+                    TextButton(onClick = { viewModel.deleteExpense() }) {
+                        Text("Yes")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { viewModel.changeDeleteDialogShow(false) }) {
+                        Text("No")
+                    }
+                },
+                text = {
+                    Text(text = "Are you sure delete Expense?")
+                }
+            )
         }
     }
 }

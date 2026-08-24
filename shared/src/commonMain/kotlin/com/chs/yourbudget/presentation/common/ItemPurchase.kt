@@ -1,5 +1,6 @@
 package com.chs.yourbudget.presentation.common
 
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,10 +11,18 @@ import com.chs.yourbudget.domain.model.PurchaseInfo
 import com.chs.yourbudget.util.toCommaString
 
 @Composable
-fun ItemPurchase(purchaseInfo: PurchaseInfo) {
+fun ItemPurchase(
+    purchaseInfo: PurchaseInfo,
+    onLonClick: (PurchaseInfo) -> Unit
+) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .combinedClickable(
+                enabled = true,
+                onClick = {},
+                onLongClick = { onLonClick(purchaseInfo) }
+            ),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         Text(text = purchaseInfo.userName)

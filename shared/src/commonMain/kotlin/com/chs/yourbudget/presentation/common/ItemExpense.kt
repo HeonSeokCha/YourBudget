@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -21,11 +22,15 @@ import com.chs.yourbudget.domain.model.ExpenseInfo
 @Composable
 fun ItemExpense(
     expenseInfo: ExpenseInfo,
-    onClick: (Long) -> Unit
+    onClick: (Long) -> Unit,
+    onLonClick: (ExpenseInfo) -> Unit
 ) {
     Row(
         modifier = Modifier.padding(24.dp)
-            .clickable(onClick = { onClick(expenseInfo.expenseId) })
+            .combinedClickable(
+                onClick = { onClick(expenseInfo.expenseId) },
+                onLongClick = { onLonClick(expenseInfo) }
+            )
     ) {
         Text(text = expenseInfo.expenseDate.toString())
     }

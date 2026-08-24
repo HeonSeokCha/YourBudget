@@ -1,6 +1,8 @@
 package com.chs.yourbudget.presentation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.systemGesturesPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -20,6 +22,8 @@ fun YourBudgetApp() {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
+                .systemBarsPadding()
+                .systemGesturesPadding()
         ) {
             MainNavDisplay(backStack)
         }
