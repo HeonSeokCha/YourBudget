@@ -22,10 +22,11 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MainNavDisplay(
+    modifier: Modifier = Modifier,
     backStack: SnapshotStateList<BudgetScreens>,
 ) {
     NavDisplay(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },

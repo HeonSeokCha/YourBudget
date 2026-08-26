@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -37,6 +38,12 @@ fun PurchaseCreateScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val textFieldState = rememberTextFieldState(Constants.USER_NAME_LIST.first())
+    val amountTextState = rememberTextFieldState()
+
+    LaunchedEffect(amountTextState.text) {
+        if (amountTextState.text.isEmpty() || amountTextState.text.isBlank()) return@LaunchedEffect
+        viewModel.changeAmountState(amountTextState.text.toString())
+    }
 
     Column(
         modifier = Modifier
@@ -87,7 +94,7 @@ fun PurchaseCreateScreen(
             }
 
             OutlinedTextField(
-                state = rememberTextFieldState(),
+                state = amountTextState,
                 label = { Text("Amount") },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -100,6 +107,7 @@ fun PurchaseCreateScreen(
                 .fillMaxWidth(),
             onClick = {
                 viewModel.clickSave()
+                clickSave()
             }
         ) {
             Text("Saved")

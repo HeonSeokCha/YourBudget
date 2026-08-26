@@ -1,7 +1,5 @@
 package com.chs.yourbudget.presentation.screens.purchase_create
 
-import com.chs.yourbudget.util.Constants
-
 data class PurchaseCreateState(
     val expandMenuState: Boolean = false,
     val userName: String? = null,

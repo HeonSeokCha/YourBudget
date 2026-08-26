@@ -37,6 +37,10 @@ class PurchaseViewModel(
         }
     }
 
+    fun changeAmountState(amount: String) {
+        _state.update { it.copy(amount = amount.toLong()) }
+    }
+
     fun clickSave() {
         if (_state.value.userName == null) return
 
