@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface BudgetRepository {
     suspend fun insertPurchase(purchaseInfo: PurchaseInfo)
     suspend fun deletePurchase(purchaseInfo: PurchaseInfo)
-    suspend fun insertExpense(expenseInfo: ExpenseInfo)
+    suspend fun insertExpense(expenseInfo: ExpenseInfo): Long
     suspend fun deleteExpense(expenseInfo: ExpenseInfo)
     fun getAllExpense(): Flow<List<ExpenseInfo>>
     fun getExpenseWithPurchaseInfo(expenseId: Long): Flow<Pair<ExpenseInfo, List<PurchaseInfo>>>

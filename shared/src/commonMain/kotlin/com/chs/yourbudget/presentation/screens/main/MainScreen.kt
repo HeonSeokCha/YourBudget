@@ -20,11 +20,13 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
@@ -95,7 +97,7 @@ fun MainScreen(
             AlertDialog(
                 onDismissRequest = { viewModel.changeDeleteDialogShow(false) },
                 confirmButton = {
-                    TextButton(onClick = { viewModel.deleteExpense() }) {
+                    TextButton(onClick = {}) {
                         Text("Yes")
                     }
                 },

@@ -8,7 +8,7 @@ import org.koin.core.annotation.Single
 class InsertExpenseUseCase(
     private val repository: BudgetRepository
 ) {
-    suspend operator fun invoke(expenseInfo: ExpenseInfo) {
+    suspend operator fun invoke(expenseInfo: ExpenseInfo): Long {
         return repository.insertExpense(expenseInfo)
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chs.yourbudget.domain.model.PurchaseInfo
 import com.chs.yourbudget.domain.usecases.GetExpenseWithPurchaseListUseCase
+import com.chs.yourbudget.domain.usecases.InsertExpenseUseCase
 import com.chs.yourbudget.domain.usecases.InsertPurchaseUseCase
 import com.chs.yourbudget.util.toLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import kotlin.time.Clock
 class PurchaseViewModel(
     @InjectedParam private val expenseId: Long,
     private val getExpenseWithPurchaseListUseCase: GetExpenseWithPurchaseListUseCase,
-    private val insertPurchaseUseCase: InsertPurchaseUseCase
+    private val insertPurchaseUseCase: InsertPurchaseUseCase,
+    private val insertExpenseUseCase: InsertExpenseUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(PurchaseCreateState())
     val state = _state.asStateFlow()
@@ -29,31 +31,7 @@ class PurchaseViewModel(
         _state.update { it.copy(expandMenuState = value) }
     }
 
-    fun changeUserName(userName: String) {
-        if (_state.value.userName == userName) {
-            _state.update { it.copy(userName = null, expandMenuState = false) }
-        } else {
-            _state.update { it.copy(userName = userName, expandMenuState = false) }
-        }
-    }
-
-    fun changeAmountState(amount: String) {
-        _state.update { it.copy(amount = amount.toLong()) }
-    }
-
     fun clickSave() {
-        if (_state.value.userName == null) return
 
-        viewModelScope.launch {
-            insertPurchaseUseCase(
-                PurchaseInfo(
-                    purchaseId = 0,
-                    expenseId = expenseId,
-                    userName = _state.value.userName!!,
-                    amount = _state.value.amount,
-                    createAt = Clock.System.now().toEpochMilliseconds().toLocalDateTime()
-                )
-            )
-        }
     }
 }

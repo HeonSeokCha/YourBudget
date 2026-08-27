@@ -5,6 +5,7 @@ import kotlinx.datetime.LocalDateTime
 
 data class ExpenseInfo(
     val expenseId: Long,
+    val title: String,
     val expenseDate: LocalDate,
     val createTime: LocalDateTime,
     val updateTime: LocalDateTime?

@@ -12,6 +12,7 @@ fun ExpenseInfo.toExpenseInfoEntity(): ExpenseInfoEntity {
     return ExpenseInfoEntity(
         idx = this.expenseId,
         expenseDate = this.expenseDate.toMillis(),
+        title = this.title,
         createAt = this.createTime.toMillis(),
         updateAt = this.updateTime?.toMillis()
     )
@@ -20,6 +21,7 @@ fun ExpenseInfo.toExpenseInfoEntity(): ExpenseInfoEntity {
 fun ExpenseInfoEntity.toExpenseInfo(): ExpenseInfo {
     return ExpenseInfo(
         expenseId = this.idx,
+        title = this.title,
         expenseDate = this.expenseDate.toLocalDate(),
         createTime = this.createAt.toLocalDateTime(),
         updateTime = this.updateAt?.toLocalDateTime()

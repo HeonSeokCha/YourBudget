@@ -25,8 +25,8 @@ class BudgetRepositoryImpl(
         purchaseDao.deleteEntity(purchaseInfo.toPurchaseInfoEntity())
     }
 
-    override suspend fun insertExpense(expenseInfo: ExpenseInfo) {
-        expenseDao.upsertEntity(expenseInfo.toExpenseInfoEntity())
+    override suspend fun insertExpense(expenseInfo: ExpenseInfo): Long {
+        return expenseDao.insert(expenseInfo.toExpenseInfoEntity())
     }
 
     override suspend fun deleteExpense(expenseInfo: ExpenseInfo) {

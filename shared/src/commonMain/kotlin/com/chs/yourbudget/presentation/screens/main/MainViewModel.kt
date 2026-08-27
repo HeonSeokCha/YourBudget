@@ -18,8 +18,7 @@ import kotlin.time.Clock
 @KoinViewModel
 class MainViewModel(
     private val getAllExpenseUseCase: GetAllExpenseUseCase,
-    private val insertExpenseUseCase: InsertExpenseUseCase,
-    private val deleteExpenseUseCase: InsertExpenseUseCase
+
 ) : ViewModel() {
     private val _state = MutableStateFlow(MainState())
     val state = _state.asStateFlow()
@@ -53,27 +52,16 @@ class MainViewModel(
 
     fun createExpense(targetDate: Long) {
         viewModelScope.launch {
-            insertExpenseUseCase(
-                ExpenseInfo(
-                    expenseId = 0L,
-                    expenseDate = targetDate.toLocalDate(),
-                    createTime = Clock.System.now().toEpochMilliseconds().toLocalDateTime(),
-                    updateTime = null
-                )
-            )
+//            insertExpenseUseCase(
+//                ExpenseInfo(
+//                    expenseId = 0L,
+//                    expenseDate = targetDate.toLocalDate(),
+//                    createTime = Clock.System.now().toEpochMilliseconds().toLocalDateTime(),
+//                    updateTime = null
+//                )
+//            )
         }
     }
 
-    fun deleteExpense() {
-        if (_state.value.targetExpenseInfo == null) return
-        viewModelScope.launch {
-            deleteExpenseUseCase(_state.value.targetExpenseInfo!!)
-        }
-        _state.update {
-            it.copy(
-                targetExpenseInfo = null,
-                isShowDeleteDialog = false
-            )
-        }
-    }
+
 }
