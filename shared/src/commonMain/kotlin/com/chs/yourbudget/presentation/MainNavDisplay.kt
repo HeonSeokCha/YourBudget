@@ -15,8 +15,9 @@ import com.chs.yourbudget.presentation.screens.expense.ExpenseScreen
 import com.chs.yourbudget.presentation.screens.expense.ExpenseViewModel
 import com.chs.yourbudget.presentation.screens.main.MainScreen
 import com.chs.yourbudget.presentation.screens.main.MainViewModel
-import com.chs.yourbudget.presentation.screens.purchase_create.PurchaseCreateScreen
-import com.chs.yourbudget.presentation.screens.purchase_create.PurchaseViewModel
+import com.chs.yourbudget.presentation.screens.create_expense.PurchaseCreateScreen
+import com.chs.yourbudget.presentation.screens.create_expense.CreateExpenseViewModel
+import com.chs.yourbudget.presentation.screens.update_purchase.UpdatePurchaseViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -64,18 +65,22 @@ fun MainNavDisplay(
                 ExpenseScreen(
                     viewModel = viewModel,
                     onClickCreatePurchase = {
-                        backStack.add(BudgetScreens.ScreenPurchaseCreate(it))
+                        backStack.add(BudgetScreens.ScreenPurchaseUpdate(it))
                     }
                 )
             }
 
-            entry<BudgetScreens.ScreenPurchaseCreate> {
-                val viewModel = koinViewModel<PurchaseViewModel> {
+            entry<BudgetScreens.ScreenExpenseCreate> {
+                val viewModel = koinViewModel<CreateExpenseViewModel>()
+
+            }
+
+            entry<BudgetScreens.ScreenPurchaseUpdate> {
+                val viewModel = koinViewModel<UpdatePurchaseViewModel> {
                     parametersOf(it.expenseId)
                 }
-                PurchaseCreateScreen(viewModel) {
-                    backStack.removeLastOrNull()
-                }
+
+
             }
         }
     )

@@ -33,7 +33,6 @@ fun MainScreen(
     onClickExpense: (Long) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val datePickerState = rememberDatePickerState()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -67,30 +66,6 @@ fun MainScreen(
                 imageVector = Icons.Filled.Add,
                 contentDescription = null
             )
-        }
-
-        if (state.isShowDateDialog) {
-            DatePickerDialog(
-                onDismissRequest = { viewModel.changeDateDialogShow(false) },
-                confirmButton = {
-                    TextButton(onClick = {
-                        viewModel.changeDateDialogShow(false)
-                        if (datePickerState.selectedDateMillis == null) {
-                            return@TextButton
-                        }
-                        viewModel.createExpense(datePickerState.selectedDateMillis!!)
-                    }) {
-                        Text("OK")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { viewModel.changeDateDialogShow(false) }) {
-                        Text("Cancel")
-                    }
-                }
-            ) {
-                DatePicker(state = datePickerState)
-            }
         }
 
         if (state.isShowDeleteDialog) {
