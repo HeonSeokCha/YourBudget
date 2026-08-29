@@ -15,29 +15,11 @@ import org.koin.core.annotation.KoinViewModel
 
 @KoinViewModel
 class CreateExpenseViewModel(
-    @InjectedParam private val expenseId: Long,
-    private val getExpenseWithPurchaseListUseCase: GetExpenseWithPurchaseListUseCase,
     private val insertPurchaseUseCase: InsertPurchaseUseCase,
     private val insertExpenseUseCase: InsertExpenseUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(CreateExpenseState())
     val state = _state.asStateFlow()
-
-    init {
-        if (expenseId != 0L) {
-            viewModelScope.launch {
-                val info = getExpenseWithPurchaseListUseCase(expenseId)
-                _state.update {
-                    it.copy(
-                        expenseInfo = info.first,
-                        purchaseList = info.second
-                    )
-                }
-            }
-        } else {
-        }
-    }
-
 
     fun changeShowDateDialog(value: Boolean) {
         _state.update { it.copy(isShowDateDialog = value) }
@@ -45,6 +27,26 @@ class CreateExpenseViewModel(
 
     fun updateExpenseDate(milli: Long) {
         _state.update { it.copy(expenseDate = milli.toLocalDate()) }
+    }
+
+    fun updateExpenseTitle(title: String) {
+        _state.update { it.copy(title = title) }
+    }
+
+    fun updatePurchaseList(info: Pair<String, Long>) {
+        _state.update {
+            it.copy(
+                purchaseList = it.purchaseList.apply { this.add(info) }
+            )
+        }
+    }
+
+    fun removePurchaseList(idx: Int) {
+        _state.update {
+            it.copy(
+                purchaseList = it.purchaseList.apply { this.removeAt(idx) }
+            )
+        }
     }
 
     fun clickSave() {

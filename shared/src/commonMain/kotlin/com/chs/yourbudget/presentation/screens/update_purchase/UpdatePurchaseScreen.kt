@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -19,6 +21,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,11 +40,10 @@ fun UpdatePurchaseScreen(
     clickSave: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val textFieldState = rememberTextFieldState(Constants.USER_NAME_LIST.first())
-    val amountTextState = rememberTextFieldState()
+    val titleTextState = rememberTextFieldState(state.expenseInfo?.title ?: "")
 
-    LaunchedEffect(amountTextState.text) {
-        if (amountTextState.text.isEmpty() || amountTextState.text.isBlank()) return@LaunchedEffect
+    LaunchedEffect(titleTextState.text) {
+        if (titleTextState.text.isEmpty() || titleTextState.text.isBlank()) return@LaunchedEffect
     }
 
     Column(
@@ -54,51 +56,33 @@ fun UpdatePurchaseScreen(
                 .fillMaxSize()
                 .weight(1f),
         ) {
+            OutlinedTextField(
+                state = titleTextState,
+                lineLimits = TextFieldLineLimits.SingleLine,
+                label = { Text("Title") },
+                readOnly = true,
+            )
 
-            ExposedDropdownMenuBox(
-                expanded = state.expandMenuState,
-                onExpandedChange = { viewModel.changeExpandState(it) }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TextButton(
+                onClick = {},
+                enabled = false
             ) {
-                TextField(
-                    modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-                    state = textFieldState,
-                    readOnly = true,
-                    lineLimits = TextFieldLineLimits.SingleLine,
-                    label = { Text("User Name") },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = state.expandMenuState) },
-                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                )
-
-                ExposedDropdownMenu(
-                    expanded = state.expandMenuState,
-                    onDismissRequest = { viewModel.changeExpandState(false) },
-                ) {
-                    Constants.USER_NAME_LIST.forEach { name ->
-                        DropdownMenuItem(
-                            text = { Text(name, style = MaterialTheme.typography.bodyLarge) },
-                            onClick = {
-                                textFieldState.setTextAndPlaceCursorAtEnd(name)
-                            },
-                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                            leadingIcon = {
-
-                            }
-                        )
-                    }
-                }
+                Text(text = state.expenseInfo?.expenseDate.toString())
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
-                state = amountTextState,
-                label = { Text("Amount") },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                )
-            )
+            Text(text = "Purchases")
+
+            LazyColumn {
+                items(state.purchaseList) {
+
+                }
+            }
         }
+
         Button(
             modifier = Modifier
                 .fillMaxWidth(),

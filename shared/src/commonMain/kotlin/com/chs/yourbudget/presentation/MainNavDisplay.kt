@@ -11,12 +11,13 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.chs.yourbudget.presentation.screens.create_expense.CreateExpenseScreen
 import com.chs.yourbudget.presentation.screens.expense.ExpenseScreen
 import com.chs.yourbudget.presentation.screens.expense.ExpenseViewModel
 import com.chs.yourbudget.presentation.screens.main.MainScreen
 import com.chs.yourbudget.presentation.screens.main.MainViewModel
-import com.chs.yourbudget.presentation.screens.create_expense.PurchaseCreateScreen
 import com.chs.yourbudget.presentation.screens.create_expense.CreateExpenseViewModel
+import com.chs.yourbudget.presentation.screens.update_purchase.UpdatePurchaseScreen
 import com.chs.yourbudget.presentation.screens.update_purchase.UpdatePurchaseViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -72,7 +73,9 @@ fun MainNavDisplay(
 
             entry<BudgetScreens.ScreenExpenseCreate> {
                 val viewModel = koinViewModel<CreateExpenseViewModel>()
-
+                CreateExpenseScreen(viewModel) {
+                    backStack.removeLastOrNull()
+                }
             }
 
             entry<BudgetScreens.ScreenPurchaseUpdate> {
@@ -80,7 +83,9 @@ fun MainNavDisplay(
                     parametersOf(it.expenseId)
                 }
 
-
+                UpdatePurchaseScreen(viewModel) {
+                    backStack.removeLastOrNull()
+                }
             }
         }
     )
