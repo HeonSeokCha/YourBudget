@@ -20,8 +20,7 @@ abstract class ExpenseDao : BaseDao<ExpenseInfoEntity> {
           LEFT JOIN purchases_info as purchase ON expense.idx = purchase.expenseIdx
          WHERE expense.idx = :expenseId
     """)
-    abstract suspend fun getExpenseInfo(expenseId: Long): Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>
-
+    abstract fun getExpenseInfoWithPurchase(expenseId: Long): Flow<Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>>
 
     @Query("""
         SELECT expense.*, SUM(purchase.amount) as totalAmount
@@ -29,4 +28,7 @@ abstract class ExpenseDao : BaseDao<ExpenseInfoEntity> {
           LEFT JOIN purchases_info as purchase ON expense.idx = purchase.expenseIdx
     """)
     abstract fun getExpenseWithTotalAmount(): Flow<Map<ExpenseInfoEntity, @MapColumn("totalAmount") Long>>
+
+    @Query("DELETE FROM expense_info WHERE idx = :expenseId")
+    abstract suspend fun deleteFromExpenseId(expenseId: Long)
 }

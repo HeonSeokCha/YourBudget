@@ -3,6 +3,7 @@ package com.chs.yourbudget.presentation.screens.expense
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chs.yourbudget.domain.model.PurchaseInfo
+import com.chs.yourbudget.domain.usecases.DeleteExpenseWithPurchaseUseCase
 import com.chs.yourbudget.domain.usecases.DeletePurchaseUseCase
 import com.chs.yourbudget.domain.usecases.GetExpenseWithPurchaseListUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,7 @@ import org.koin.core.annotation.KoinViewModel
 class ExpenseViewModel(
     @InjectedParam private val expenseId: Long,
     private val getExpenseWithPurchaseListUseCase: GetExpenseWithPurchaseListUseCase,
-    private val deletePurchaseUseCase: DeletePurchaseUseCase
+    private val deleteExpenseWithPurchaseUseCase: DeleteExpenseWithPurchaseUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(ExpenseState())
     val state = _state.asStateFlow()
@@ -44,7 +45,7 @@ class ExpenseViewModel(
     fun deletePurchase() {
         if (state.value.targetPurchaseInfo == null) return
         viewModelScope.launch {
-            deletePurchaseUseCase(state.value.targetPurchaseInfo!!)
+            deleteExpenseWithPurchaseUseCase(expenseId)
         }
 
         _state.update {

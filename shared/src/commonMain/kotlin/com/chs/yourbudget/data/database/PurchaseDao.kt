@@ -6,7 +6,6 @@ import androidx.room3.Query
 
 @Dao
 abstract class PurchaseDao : BaseDao<PurchaseInfoEntity> {
-
     @Query(
         """
          SELECT expense.expenseDate, purchase.userName, SUM(purchase.amount) as totalMount
@@ -26,4 +25,7 @@ abstract class PurchaseDao : BaseDao<PurchaseInfoEntity> {
           GROUP BY userName
     """)
     abstract suspend fun getTotalAmountByUserName(): Map<@MapColumn("userName") String, @MapColumn("totalAmount") Long>
+
+    @Query("DELETE FROM purchases_info WHERE expenseIdx = :expenseId")
+    abstract suspend fun deleteFromExpenseId(expenseId: Long)
 }
