@@ -32,6 +32,11 @@ fun Instant.toLocalDate(): LocalDate {
     return this.toEpochMilliseconds().toLocalDateTime().date
 }
 
+
+fun Instant.toLocalDateTime(): LocalDateTime {
+    return this.toEpochMilliseconds().toLocalDateTime()
+}
+
 fun Long.toCommaString(): String {
     val isNegative = this < 0
     val absStr = kotlin.math.abs(this).toString()

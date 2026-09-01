@@ -2,16 +2,17 @@ package com.chs.yourbudget.presentation.screens.create_expense
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chs.yourbudget.domain.usecases.GetExpenseWithPurchaseListUseCase
+import com.chs.yourbudget.domain.model.ExpenseInfo
 import com.chs.yourbudget.domain.usecases.InsertExpenseUseCase
 import com.chs.yourbudget.domain.usecases.InsertPurchaseUseCase
 import com.chs.yourbudget.util.toLocalDate
+import com.chs.yourbudget.util.toLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.InjectedParam
 import org.koin.core.annotation.KoinViewModel
+import kotlin.time.Clock
 
 @KoinViewModel
 class CreateExpenseViewModel(
@@ -50,6 +51,15 @@ class CreateExpenseViewModel(
     }
 
     fun clickSave() {
-
+        if (_state.value.title == null) return
+        viewModelScope.launch {
+            insertExpenseUseCase(
+                ExpenseInfo(
+                    title = _state.value.title!!,
+                    expenseDate = _state.value.expenseDate,
+                    createTime = Clock.System.now().toLocalDateTime()
+                )
+            )
+        }
     }
 }

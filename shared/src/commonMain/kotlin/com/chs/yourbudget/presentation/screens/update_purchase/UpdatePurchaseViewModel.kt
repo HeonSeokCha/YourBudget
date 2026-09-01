@@ -3,8 +3,7 @@ package com.chs.yourbudget.presentation.screens.update_purchase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chs.yourbudget.domain.usecases.DeletePurchaseUseCase
-import com.chs.yourbudget.domain.usecases.GetExpenseWithPurchaseListUseCase
-import com.chs.yourbudget.domain.usecases.InsertExpenseUseCase
+import com.chs.yourbudget.domain.usecases.GetExpenseWithPurchasesUseCase
 import com.chs.yourbudget.domain.usecases.InsertPurchaseUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +15,7 @@ import org.koin.core.annotation.KoinViewModel
 @KoinViewModel
 class UpdatePurchaseViewModel(
     @InjectedParam private val expenseId: Long,
-    private val getExpenseWithPurchaseListUseCase: GetExpenseWithPurchaseListUseCase,
+    private val getExpenseWithPurchasesUseCase: GetExpenseWithPurchasesUseCase,
     private val insertPurchaseUseCase: InsertPurchaseUseCase,
     private val deletePurchaseUseCase: DeletePurchaseUseCase
 ) : ViewModel() {
@@ -25,13 +24,12 @@ class UpdatePurchaseViewModel(
 
     init {
         viewModelScope.launch {
-            getExpenseWithPurchaseListUseCase(expenseId).collect { info ->
-                _state.update {
-                    it.copy(
-                        expenseInfo = info.first,
-                        purchaseList = info.second
-                    )
-                }
+            _state.update {
+                val info = getExpenseWithPurchasesUseCase(expenseId)
+                it.copy(
+                    expenseInfo = info.first,
+                    purchaseList = info.second
+                )
             }
         }
     }

@@ -39,7 +39,7 @@ fun CreateExpenseScreen(
     val titleTextState = rememberTextFieldState()
 
     LaunchedEffect(titleTextState.text) {
-        if (titleTextState.text.isEmpty() || titleTextState.text.isBlank()) return@LaunchedEffect
+        viewModel.updateExpenseTitle(titleTextState.text.toString())
     }
 
     Column(
@@ -57,7 +57,7 @@ fun CreateExpenseScreen(
                 lineLimits = TextFieldLineLimits.SingleLine,
                 label = { Text("Title") },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
+                    keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
                 )
             )

@@ -19,8 +19,17 @@ abstract class ExpenseDao : BaseDao<ExpenseInfoEntity> {
           FROM expense_info as expense
           LEFT JOIN purchases_info as purchase ON expense.idx = purchase.expenseIdx
          WHERE expense.idx = :expenseId
+         LIMIT 1
     """)
-    abstract fun getExpenseInfoWithPurchase(expenseId: Long): Flow<Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>>
+    abstract suspend fun getExpenseInfoWithPurchase(expenseId: Long): Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>
+
+    @Query("""
+        SELECT *
+          FROM expense_info as expense
+          LEFT JOIN purchases_info as purchase ON expense.idx = purchase.expenseIdx
+         WHERE expense.expenseDate = :targetDate
+    """)
+    abstract fun getExpensesWithPurchases(targetDate: Long): Flow<Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>>
 
     @Query("""
         SELECT expense.*, SUM(purchase.amount) as totalAmount

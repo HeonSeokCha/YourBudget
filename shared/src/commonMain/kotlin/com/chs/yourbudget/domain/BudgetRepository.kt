@@ -3,6 +3,7 @@ package com.chs.yourbudget.domain
 import com.chs.yourbudget.domain.model.ExpenseInfo
 import com.chs.yourbudget.domain.model.PurchaseInfo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.LocalDate
 
 interface BudgetRepository {
     suspend fun upsertPurchase(purchaseInfo: PurchaseInfo)
@@ -11,6 +12,7 @@ interface BudgetRepository {
     suspend fun deleteExpense(expenseInfo: ExpenseInfo)
     suspend fun deleteExpenseWithPurchase(expenseId: Long)
     fun getAllExpense(): Flow<List<ExpenseInfo>>
-    fun getExpenseWithPurchaseInfo(expenseId: Long): Flow<Pair<ExpenseInfo, List<PurchaseInfo>>>
+    fun getExpensesWithPurchaseInfo(targetDate: Long): Flow<List<Pair<ExpenseInfo, List<PurchaseInfo>>>>
+    suspend fun getExpenseWithPurchaseInfo(expenseId: Long): Pair<ExpenseInfo, List<PurchaseInfo>>
     suspend fun getTotalAmountByName(): Map<String, Long>
 }

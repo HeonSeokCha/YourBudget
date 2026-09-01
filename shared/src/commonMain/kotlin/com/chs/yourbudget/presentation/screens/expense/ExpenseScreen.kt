@@ -18,12 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.chs.yourbudget.presentation.common.ItemExpense
 import com.chs.yourbudget.presentation.common.ItemPurchase
 
 @Composable
 fun ExpenseScreen(
     viewModel: ExpenseViewModel,
-    onClickCreatePurchase: (Long) -> Unit
+    onClickUpdateExpense: (Long) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -35,34 +36,15 @@ fun ExpenseScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            if (state.expenseInfo != null) {
-                item {
-                    Text(state.expenseInfo!!.expenseDate.toString())
-                }
-            }
-
-            items(state.purchaseList) {
-                ItemPurchase(purchaseInfo = it) {
-                    viewModel.setDeletePurchaseInfo(it)
-                    viewModel.changeShowDeleteDialog(true)
-                }
-            }
-        }
-
-        if (state.expenseInfo != null) {
-            FloatingActionButton(
-                onClick = {
-                    onClickCreatePurchase(state.expenseInfo!!.expenseId) },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(
-                        bottom = 8.dp,
-                        end = 8.dp
-                    ),
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = null
+            items(state.expenseWithPurchaseList) {
+                val expenseInfo = it.first
+                ItemExpense(
+                    expenseInfo = expenseInfo,
+                    onClick = { onClickUpdateExpense(expenseInfo.expenseId) },
+                    onLonClick = {
+                        viewModel.setDeleteExpenseInfo(expenseInfo)
+                        viewModel.changeShowDeleteDialog(true)
+                    }
                 )
             }
         }
@@ -71,7 +53,7 @@ fun ExpenseScreen(
             AlertDialog(
                 onDismissRequest = { viewModel.changeShowDeleteDialog(false) },
                 confirmButton = {
-                    TextButton(onClick = { viewModel.deletePurchase() }) {
+                    TextButton(onClick = { viewModel.deleteExpenseInfo() }) {
                         Text("Yes")
                     }
                 },

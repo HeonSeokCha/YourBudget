@@ -30,7 +30,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
-    onClickExpense: (Long) -> Unit
+    onClickExpense: (Long) -> Unit,
+    onClickCreateExpense: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Box(
@@ -54,7 +55,7 @@ fun MainScreen(
         }
 
         FloatingActionButton(
-            onClick = { viewModel.changeDateDialogShow(true) },
+            onClick = onClickCreateExpense,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(

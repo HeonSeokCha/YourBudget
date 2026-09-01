@@ -35,10 +35,6 @@ class MainViewModel(
         }
     }
 
-    fun changeDateDialogShow(value: Boolean) {
-        _state.update { it.copy(isShowDateDialog = value) }
-    }
-
     fun changeDeleteDialogShow(value: Boolean) {
         if (!value) {
             _state.update { it.copy(targetExpenseInfo = null) }
