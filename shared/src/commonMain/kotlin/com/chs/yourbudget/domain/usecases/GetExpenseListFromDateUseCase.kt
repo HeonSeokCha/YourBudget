@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Single
 
 @Single
-class GetExpenseListWithPurchasesUseCase(
+class GetExpenseListFromDateUseCase(
     private val repository: BudgetRepository
 ) {
-    operator fun invoke(targetDate: Long): Flow<List<Pair<ExpenseInfo, List<PurchaseInfo>>>> {
-        return repository.getExpensesWithPurchaseInfo(targetDate)
+    operator fun invoke(targetDate: Long): Flow<List<Pair<ExpenseInfo, Long>>> {
+        return repository.getExpenseListFromDate(targetDate)
     }
 }

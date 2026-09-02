@@ -44,11 +44,9 @@ class BudgetRepositoryImpl(
         }
     }
 
-    override fun getExpensesWithPurchaseInfo(targetDate: Long): Flow<List<Pair<ExpenseInfo, List<PurchaseInfo>>>> {
-        return expenseDao.getExpensesWithPurchases(targetDate).map {
-            it.map {
-                it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() }
-            }
+    override fun getExpenseListFromDate(targetDate: Long): Flow<List<Pair<ExpenseInfo, Long>>> {
+        return expenseDao.getExpensesListFromDate(targetDate).map {
+            it.map { it.key.toExpenseInfo() to it.value }
         }
     }
 

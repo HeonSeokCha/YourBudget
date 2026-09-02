@@ -16,7 +16,6 @@ import kotlin.time.Clock
 
 @KoinViewModel
 class CreateExpenseViewModel(
-    private val insertPurchaseUseCase: InsertPurchaseUseCase,
     private val insertExpenseUseCase: InsertExpenseUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(CreateExpenseState())

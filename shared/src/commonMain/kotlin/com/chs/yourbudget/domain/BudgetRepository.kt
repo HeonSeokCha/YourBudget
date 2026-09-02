@@ -12,7 +12,7 @@ interface BudgetRepository {
     suspend fun deleteExpense(expenseInfo: ExpenseInfo)
     suspend fun deleteExpenseWithPurchase(expenseId: Long)
     fun getAllExpense(): Flow<List<ExpenseInfo>>
-    fun getExpensesWithPurchaseInfo(targetDate: Long): Flow<List<Pair<ExpenseInfo, List<PurchaseInfo>>>>
+    fun getExpenseListFromDate(targetDate: Long): Flow<List<Pair<ExpenseInfo, Long>>>
     suspend fun getExpenseWithPurchaseInfo(expenseId: Long): Pair<ExpenseInfo, List<PurchaseInfo>>
     suspend fun getTotalAmountByName(): Map<String, Long>
 }

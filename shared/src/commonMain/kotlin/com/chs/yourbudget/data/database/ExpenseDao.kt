@@ -24,12 +24,12 @@ abstract class ExpenseDao : BaseDao<ExpenseInfoEntity> {
     abstract suspend fun getExpenseInfoWithPurchase(expenseId: Long): Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>
 
     @Query("""
-        SELECT *
+        SELECT expense.*, IFNULL(SUM(purchase.amount), 0) as totalAmount
           FROM expense_info as expense
           LEFT JOIN purchases_info as purchase ON expense.idx = purchase.expenseIdx
          WHERE expense.expenseDate = :targetDate
     """)
-    abstract fun getExpensesWithPurchases(targetDate: Long): Flow<Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>>
+    abstract fun getExpensesListFromDate(targetDate: Long): Flow<Map<ExpenseInfoEntity, @MapColumn("totalAmount") Long>>
 
     @Query("""
         SELECT expense.*, SUM(purchase.amount) as totalAmount
