@@ -44,12 +44,8 @@ fun MainScreen(
         ) {
             items(state.expenseList) {
                 ItemExpense(
-                    expenseInfo = it,
+                    expenseSummaryInfo = it,
                     onClick = onClickExpense,
-                    onLonClick = {
-                        viewModel.targetExpense(expenseInfo = it)
-                        viewModel.changeDeleteDialogShow(true)
-                    }
                 )
             }
         }

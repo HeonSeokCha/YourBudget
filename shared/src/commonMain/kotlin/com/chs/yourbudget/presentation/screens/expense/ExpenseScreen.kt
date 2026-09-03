@@ -38,14 +38,14 @@ fun ExpenseScreen(
         ) {
             items(state.expenseWithPurchaseList) {
                 val expenseInfo = it.first
-                ItemExpense(
-                    expenseInfo = expenseInfo,
-                    onClick = { onClickUpdateExpense(expenseInfo.expenseId) },
-                    onLonClick = {
-                        viewModel.setDeleteExpenseInfo(expenseInfo)
-                        viewModel.changeShowDeleteDialog(true)
-                    }
-                )
+//                ItemExpense(
+//                    expenseInfo = expenseInfo,
+//                    onClick = { onClickUpdateExpense(expenseInfo.expenseId) },
+//                    onLonClick = {
+//                        viewModel.setDeleteExpenseInfo(expenseInfo)
+//                        viewModel.changeShowDeleteDialog(true)
+//                    }
+//                )
             }
         }
 

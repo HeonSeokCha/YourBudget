@@ -8,10 +8,10 @@ import kotlinx.datetime.LocalDate
 interface BudgetRepository {
     suspend fun upsertPurchase(purchaseInfo: PurchaseInfo)
     suspend fun deletePurchase(purchaseInfo: PurchaseInfo)
-    suspend fun insertExpense(expenseInfo: ExpenseInfo): Long
+    suspend fun insertExpense(expenseInfo: ExpenseInfo)
     suspend fun deleteExpense(expenseInfo: ExpenseInfo)
     suspend fun deleteExpenseWithPurchase(expenseId: Long)
-    fun getAllExpense(): Flow<List<ExpenseInfo>>
+    fun getAllExpense(): Flow<List<Pair<LocalDate, Long>>>
     fun getExpenseListFromDate(targetDate: Long): Flow<List<Pair<ExpenseInfo, Long>>>
     suspend fun getExpenseWithPurchaseInfo(expenseId: Long): Pair<ExpenseInfo, List<PurchaseInfo>>
     suspend fun getTotalAmountByName(): Map<String, Long>

@@ -64,7 +64,7 @@ fun MainNavDisplay(
 
             entry<BudgetScreens.ScreenExpense> {
                 val viewModel = koinViewModel<ExpenseViewModel> {
-                    parametersOf(it.expenseId)
+                    parametersOf(it.expenseDate)
                 }
                 ExpenseScreen(
                     viewModel = viewModel,

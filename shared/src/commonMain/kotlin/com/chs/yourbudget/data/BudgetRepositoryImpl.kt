@@ -5,6 +5,7 @@ import com.chs.yourbudget.data.database.PurchaseDao
 import com.chs.yourbudget.domain.BudgetRepository
 import com.chs.yourbudget.domain.model.ExpenseInfo
 import com.chs.yourbudget.domain.model.PurchaseInfo
+import com.chs.yourbudget.util.toLocalDate
 import com.chs.yourbudget.util.toMillis
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -25,8 +26,8 @@ class BudgetRepositoryImpl(
         purchaseDao.deleteEntity(purchaseInfo.toPurchaseInfoEntity())
     }
 
-    override suspend fun insertExpense(expenseInfo: ExpenseInfo): Long {
-        return expenseDao.insert(expenseInfo.toExpenseInfoEntity())
+    override suspend fun insertExpense(expenseInfo: ExpenseInfo) {
+        return expenseDao.upsertEntity(expenseInfo.toExpenseInfoEntity())
     }
 
     override suspend fun deleteExpense(expenseInfo: ExpenseInfo) {
@@ -38,9 +39,9 @@ class BudgetRepositoryImpl(
         purchaseDao.deleteFromExpenseId(expenseId)
     }
 
-    override fun getAllExpense(): Flow<List<ExpenseInfo>> {
+    override fun getAllExpense(): Flow<List<Pair<LocalDate, Long>>> {
         return expenseDao.getAllExpenseList().map {
-            it.map { it.toExpenseInfo() }
+            it.map { it.key.toLocalDate() to it.value }
         }
     }
 
@@ -51,9 +52,11 @@ class BudgetRepositoryImpl(
     }
 
     override suspend fun getExpenseWithPurchaseInfo(expenseId: Long): Pair<ExpenseInfo, List<PurchaseInfo>> {
-        return expenseDao.getExpenseInfoWithPurchase(expenseId).map {
+        val a = expenseDao.getExpenseInfoWithPurchase(expenseId).map {
             it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() }
-        }.single()
+        }
+
+        return a.single()
     }
 
     override suspend fun getTotalAmountByName(): Map<String, Long> {
