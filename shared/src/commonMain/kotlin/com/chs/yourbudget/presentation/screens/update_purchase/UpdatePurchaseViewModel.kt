@@ -27,8 +27,8 @@ class UpdatePurchaseViewModel(
             _state.update {
                 val info = getExpenseWithPurchasesUseCase(expenseId)
                 it.copy(
-                    expenseInfo = info.first,
-                    purchaseList = info.second
+                    expenseInfo = info.keys.first(),
+                    purchaseList = info.values.first()
                 )
             }
         }

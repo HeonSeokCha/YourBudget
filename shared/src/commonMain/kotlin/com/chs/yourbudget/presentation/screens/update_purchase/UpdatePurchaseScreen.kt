@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.chs.yourbudget.presentation.common.ItemPurchase
 import com.chs.yourbudget.util.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,7 +60,7 @@ fun UpdatePurchaseScreen(
             OutlinedTextField(
                 state = titleTextState,
                 lineLimits = TextFieldLineLimits.SingleLine,
-                label = { Text("Title") },
+                label = { Text(state.expenseInfo?.title ?: "") },
                 readOnly = true,
             )
 
@@ -78,7 +79,10 @@ fun UpdatePurchaseScreen(
 
             LazyColumn {
                 items(state.purchaseList) {
-
+                    ItemPurchase(
+                        purchaseInfo = it,
+                        onLonClick = { }
+                    )
                 }
             }
         }

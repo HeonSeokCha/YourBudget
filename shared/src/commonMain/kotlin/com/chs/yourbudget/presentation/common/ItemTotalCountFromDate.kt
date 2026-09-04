@@ -9,12 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.chs.yourbudget.domain.model.ExpenseInfo
 import com.chs.yourbudget.util.toCommaString
+import com.chs.yourbudget.util.toMillis
+import kotlinx.datetime.LocalDate
+
 
 @Composable
-fun ItemExpense(
-    expenseSummaryInfo: Pair<ExpenseInfo, Long>,
+fun ItemTotalCountFromDate(
+    expenseSummaryInfo: Pair<LocalDate, Long>,
     onClick: (Long) -> Unit,
 ) {
     Row(
@@ -22,11 +24,11 @@ fun ItemExpense(
             .fillMaxWidth()
             .padding(24.dp)
             .clickable(
-                onClick = { onClick(expenseSummaryInfo.first.expenseId) }
+                onClick = { onClick(expenseSummaryInfo.first.toMillis()) }
             ),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = expenseSummaryInfo.first.title)
+        Text(text = expenseSummaryInfo.first.toString())
         Text(text = expenseSummaryInfo.second.toCommaString())
     }
 }

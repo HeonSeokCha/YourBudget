@@ -23,7 +23,7 @@ fun ItemPurchase(
                 onClick = {},
                 onLongClick = { onLonClick(purchaseInfo) }
             ),
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = purchaseInfo.userName)
         Text(text = purchaseInfo.amount.toCommaString())

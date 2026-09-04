@@ -25,6 +25,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
+import com.chs.yourbudget.presentation.common.ItemTotalCountFromDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,9 +44,9 @@ fun MainScreen(
                 .fillMaxSize()
         ) {
             items(state.expenseList) {
-                ItemExpense(
+                ItemTotalCountFromDate(
                     expenseSummaryInfo = it,
-                    onClick = onClickExpense,
+                    onClick = onClickExpense
                 )
             }
         }
@@ -62,25 +63,6 @@ fun MainScreen(
             Icon(
                 imageVector = Icons.Filled.Add,
                 contentDescription = null
-            )
-        }
-
-        if (state.isShowDeleteDialog) {
-            AlertDialog(
-                onDismissRequest = { viewModel.changeDeleteDialogShow(false) },
-                confirmButton = {
-                    TextButton(onClick = {}) {
-                        Text("Yes")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { viewModel.changeDeleteDialogShow(false) }) {
-                        Text("No")
-                    }
-                },
-                text = {
-                    Text(text = "Are you sure delete Expense?")
-                }
             )
         }
     }

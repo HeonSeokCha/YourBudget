@@ -2,7 +2,6 @@ package com.chs.yourbudget.presentation.screens.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chs.yourbudget.domain.model.ExpenseInfo
 import com.chs.yourbudget.domain.usecases.GetAllExpenseUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,30 +28,4 @@ class MainViewModel(
             }
         }
     }
-
-    fun changeDeleteDialogShow(value: Boolean) {
-        if (!value) {
-            _state.update { it.copy(targetExpenseInfo = null) }
-        }
-        _state.update { it.copy(isShowDeleteDialog = value) }
-    }
-
-    fun targetExpense(expenseInfo: ExpenseInfo) {
-        _state.update { it.copy(targetExpenseInfo = expenseInfo) }
-    }
-
-    fun createExpense(targetDate: Long) {
-        viewModelScope.launch {
-//            insertExpenseUseCase(
-//                ExpenseInfo(
-//                    expenseId = 0L,
-//                    expenseDate = targetDate.toLocalDate(),
-//                    createTime = Clock.System.now().toEpochMilliseconds().toLocalDateTime(),
-//                    updateTime = null
-//                )
-//            )
-        }
-    }
-
-
 }

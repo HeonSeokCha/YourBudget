@@ -4,7 +4,5 @@ import com.chs.yourbudget.domain.model.ExpenseInfo
 import kotlinx.datetime.LocalDate
 
 data class MainState(
-    val expenseList: List<Pair<LocalDate, Long>> = listOf(),
-    val isShowDeleteDialog: Boolean = false,
-    val targetExpenseInfo: ExpenseInfo? = null
+    val expenseList: List<Pair<LocalDate, Long>> = listOf()
 )

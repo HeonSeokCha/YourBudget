@@ -51,12 +51,10 @@ class BudgetRepositoryImpl(
         }
     }
 
-    override suspend fun getExpenseWithPurchaseInfo(expenseId: Long): Pair<ExpenseInfo, List<PurchaseInfo>> {
-        val a = expenseDao.getExpenseInfoWithPurchase(expenseId).map {
+    override suspend fun getExpenseWithPurchaseInfo(expenseId: Long): Map<ExpenseInfo, List<PurchaseInfo>> {
+        return expenseDao.getExpenseInfoWithPurchase(expenseId).map {
             it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() }
-        }
-
-        return a.single()
+        }.toMap()
     }
 
     override suspend fun getTotalAmountByName(): Map<String, Long> {
