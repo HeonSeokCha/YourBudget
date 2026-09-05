@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -61,7 +62,6 @@ fun UpdatePurchaseScreen(
                 state = titleTextState,
                 lineLimits = TextFieldLineLimits.SingleLine,
                 label = { Text(state.expenseInfo?.title ?: "") },
-                readOnly = true,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -81,7 +81,12 @@ fun UpdatePurchaseScreen(
                 items(state.purchaseList) {
                     ItemPurchase(
                         purchaseInfo = it,
-                        onLonClick = { }
+                        onLonClick = {
+                            viewModel.changeStateFromDeleteDialog(
+                                value = true,
+                                purchaseInfo = it
+                            )
+                        }
                     )
                 }
             }
@@ -97,5 +102,24 @@ fun UpdatePurchaseScreen(
         ) {
             Text("Saved")
         }
+    }
+
+    if (state.isShowDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { viewModel.changeStateFromDeleteDialog(false) },
+            confirmButton = {
+                TextButton(onClick = {}) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.changeStateFromDeleteDialog(false) }) {
+                    Text("No")
+                }
+            },
+            text = {
+                Text(text = "Are you sure delete Expense?")
+            }
+        )
     }
 }
