@@ -7,12 +7,14 @@ import com.chs.yourbudget.domain.usecases.DeletePurchaseUseCase
 import com.chs.yourbudget.domain.usecases.GetExpenseWithPurchasesUseCase
 import com.chs.yourbudget.domain.usecases.InsertExpenseUseCase
 import com.chs.yourbudget.domain.usecases.InsertPurchaseUseCase
+import com.chs.yourbudget.util.toLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.InjectedParam
 import org.koin.core.annotation.KoinViewModel
+import kotlin.time.Clock
 
 @KoinViewModel
 class UpdatePurchaseViewModel(
@@ -34,15 +36,11 @@ class UpdatePurchaseViewModel(
                 it.copy(
                     expenseInfo = expenseInfo,
                     purchaseList = purchaseList,
-                    title = expenseInfo.title,
-                    targetDate = expenseInfo.expenseDate
+                    expenseTitle = expenseInfo.title,
+                    expenseTargetDate = expenseInfo.expenseDate
                 )
             }
         }
-    }
-
-    fun changeExpandState(value: Boolean) {
-        _state.update { it.copy(expandMenuState = value) }
     }
 
     fun changeStateFromDeleteDialog(
@@ -57,12 +55,44 @@ class UpdatePurchaseViewModel(
         }
     }
 
+
+    fun changeStateFromAddDialog(value: Boolean) {
+        _state.update {
+            it.copy(isShowAddDialog = value)
+        }
+    }
+
+    fun insertPurchase(
+        userName: String,
+        amount: Long
+    ) {
+        if (_state.value.expenseInfo == null) return
+        viewModelScope.launch {
+            insertPurchaseUseCase(
+                PurchaseInfo(
+                    expenseId = _state.value.expenseInfo!!.expenseId,
+                    userName = userName,
+                    amount = amount,
+                    createAt = Clock.System.now().toLocalDateTime()
+                )
+            )
+        }
+    }
+
+    fun deletePurchase() {
+        if (_state.value.targetPurchase == null) return
+        viewModelScope.launch {
+            deletePurchaseUseCase(_state.value.targetPurchase!!)
+            _state.update { it.copy(targetPurchase = null) }
+        }
+    }
+
     fun clickSave() {
         if (_state.value.expenseInfo == null) return
         viewModelScope.launch {
             _state.value.expenseInfo!!.copy(
-                title = _state.value.title!!,
-                expenseDate = _state.value.targetDate!!
+                title = _state.value.expenseTitle!!,
+                expenseDate = _state.value.expenseTargetDate!!
             ).run {
                 insertExpenseUseCase(this)
             }
