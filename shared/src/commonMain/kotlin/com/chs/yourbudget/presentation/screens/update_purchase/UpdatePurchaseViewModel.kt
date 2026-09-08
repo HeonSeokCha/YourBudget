@@ -3,6 +3,7 @@ package com.chs.yourbudget.presentation.screens.update_purchase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chs.yourbudget.domain.model.PurchaseInfo
+import com.chs.yourbudget.domain.usecases.DeleteExpenseWithPurchaseUseCase
 import com.chs.yourbudget.domain.usecases.DeletePurchaseUseCase
 import com.chs.yourbudget.domain.usecases.GetExpenseWithPurchasesUseCase
 import com.chs.yourbudget.domain.usecases.InsertExpenseUseCase
@@ -22,7 +23,8 @@ class UpdatePurchaseViewModel(
     private val getExpenseWithPurchasesUseCase: GetExpenseWithPurchasesUseCase,
     private val insertPurchaseUseCase: InsertPurchaseUseCase,
     private val deletePurchaseUseCase: DeletePurchaseUseCase,
-    private val insertExpenseUseCase: InsertExpenseUseCase
+    private val insertExpenseUseCase: InsertExpenseUseCase,
+    private val deleteExpenseWithPurchaseUseCase: DeleteExpenseWithPurchaseUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(UpdatePurchaseState())
     val state = _state.asStateFlow()
@@ -83,7 +85,7 @@ class UpdatePurchaseViewModel(
         if (_state.value.targetPurchase == null) return
         viewModelScope.launch {
             deletePurchaseUseCase(_state.value.targetPurchase!!)
-            _state.update { it.copy(targetPurchase = null) }
+            _state.update { it.copy(isShowDeleteDialog = false, targetPurchase = null) }
         }
     }
 
@@ -96,6 +98,14 @@ class UpdatePurchaseViewModel(
             ).run {
                 insertExpenseUseCase(this)
             }
+        }
+    }
+
+    fun deleteExpense() {
+        if (_state.value.expenseInfo == null) return
+
+        viewModelScope.launch {
+            deleteExpenseWithPurchaseUseCase(_state.value.expenseInfo!!.expenseId)
         }
     }
 }
