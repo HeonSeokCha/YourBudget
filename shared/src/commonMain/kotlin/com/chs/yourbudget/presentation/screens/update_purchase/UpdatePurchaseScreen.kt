@@ -1,6 +1,7 @@
 package com.chs.yourbudget.presentation.screens.update_purchase
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,8 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
@@ -24,6 +27,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -35,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -53,7 +59,9 @@ fun UpdatePurchaseScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val titleTextState = rememberTextFieldState()
+    var expanded by remember { mutableStateOf(false) }
     val amountTextState = rememberTextFieldState("0")
+    val userNameState = rememberTextFieldState(Constants.USER_NAME_LIST.first())
 
     LaunchedEffect(state.expenseInfo?.title) {
         titleTextState.clearText()
@@ -64,113 +72,137 @@ fun UpdatePurchaseScreen(
         if (titleTextState.text.isEmpty() || titleTextState.text.isBlank()) return@LaunchedEffect
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f),
+                .padding(8.dp)
         ) {
-            OutlinedTextField(
-                state = titleTextState,
-                lineLimits = TextFieldLineLimits.SingleLine,
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Title") }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextButton(
-                onClick = {},
-                enabled = false
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
             ) {
-                Text(text = state.expenseInfo?.expenseDate.toString())
+                OutlinedTextField(
+                    state = titleTextState,
+                    lineLimits = TextFieldLineLimits.SingleLine,
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Title") }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TextButton(
+                    onClick = {},
+                    enabled = false
+                ) {
+                    Text(text = state.expenseInfo?.expenseDate.toString())
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(text = "Purchases")
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                LazyColumn {
+                    items(state.purchaseList) {
+                        ItemPurchase(
+                            purchaseInfo = it,
+                            onLonClick = {
+                                viewModel.changeStateFromDeleteDialog(
+                                    value = true,
+                                    purchaseInfo = it
+                                )
+                            }
+                        )
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(text = "Purchases")
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            LazyColumn {
-                items(state.purchaseList) {
-                    ItemPurchase(
-                        purchaseInfo = it,
-                        onLonClick = {
-                            viewModel.changeStateFromDeleteDialog(
-                                value = true,
-                                purchaseInfo = it
-                            )
-                        }
-                    )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.4f),
+                    onClick = {
+                        viewModel.deleteExpense()
+                        onBack()
+                    }
+                ) {
+                    Text("Delete")
                 }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(0.4f),
+                    onClick = {
+                        viewModel.clickSave()
+                        onBack()
+                    }
+                ) {
+                    Text("Saved")
+                }
+
             }
         }
 
-        Row(
+        FloatingActionButton(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .align(Alignment.BottomEnd),
+            onClick = {
+                viewModel.changeStateFromAddDialog(true)
+            }
         ) {
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.4f),
-                onClick = {
-                    viewModel.deleteExpense()
-                    onBack()
-                }
-            ) {
-                Text("Delete")
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.4f),
-                onClick = {
-                    viewModel.clickSave()
-                    onBack()
-                }
-            ) {
-                Text("Saved")
-            }
-
+            Icon(
+                imageVector = Icons.Default.Add,
+                null
+            )
         }
     }
 
-//    if (state.isShowDeleteDialog) {
-//        AlertDialog(
-//            onDismissRequest = { viewModel.changeStateFromDeleteDialog(false) },
-//            confirmButton = {
-//                TextButton(onClick = { viewModel.deletePurchase() }) {
-//                    Text("Yes")
-//                }
-//            },
-//            dismissButton = {
-//                TextButton(onClick = { viewModel.changeStateFromDeleteDialog(false) }) {
-//                    Text("No")
-//                }
-//            },
-//            text = {
-//                Text(text = "Are you sure delete Expense?")
-//            }
-//        )
-//    }
-    var expanded by remember { mutableStateOf(false) }
-    val textFieldState = rememberTextFieldState(Constants.USER_NAME_LIST.first())
     if (state.isShowDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { viewModel.changeStateFromDeleteDialog(false) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.deletePurchase() }) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.changeStateFromDeleteDialog(false) }) {
+                    Text("No")
+                }
+            },
+            text = {
+                Text(text = "Are you sure delete Expense?")
+            }
+        )
+    }
+
+    if (state.isShowAddDialog) {
         AlertDialog(
             onDismissRequest = { viewModel.changeStateFromAddDialog(false) },
             confirmButton = {
-                TextButton(onClick = { viewModel.deletePurchase() }) {
+                TextButton(
+                    onClick = {
+                        viewModel.insertPurchase(
+                            userName = userNameState.text.toString(),
+                            amount = amountTextState.text.toString().toLong()
+                        )
+                    }
+                ) {
                     Text("Add")
                 }
             },
@@ -189,8 +221,11 @@ fun UpdatePurchaseScreen(
                         }
                     ) {
                         TextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                             readOnly = true,
-                            state = textFieldState,
+                            state = userNameState,
                             label = { Text("Label") },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                             colors = ExposedDropdownMenuDefaults.textFieldColors(),
@@ -204,7 +239,7 @@ fun UpdatePurchaseScreen(
                                 DropdownMenuItem(
                                     text = { Text(text = name) },
                                     onClick = {
-                                        textFieldState.setTextAndPlaceCursorAtEnd(name)
+                                        userNameState.setTextAndPlaceCursorAtEnd(name)
                                         expanded = false
                                     }
                                 )
