@@ -31,16 +31,17 @@ class UpdatePurchaseViewModel(
 
     init {
         viewModelScope.launch {
-            _state.update {
-                val info = getExpenseWithPurchasesUseCase(expenseId)
-                val expenseInfo = info.keys.first()
-                val purchaseList = info.values.first()
-                it.copy(
-                    expenseInfo = expenseInfo,
-                    purchaseList = purchaseList,
-                    expenseTitle = expenseInfo.title,
-                    expenseTargetDate = expenseInfo.expenseDate
-                )
+            getExpenseWithPurchasesUseCase(expenseId).collect { info ->
+                _state.update {
+                    val expenseInfo = info.keys.first()
+                    val purchaseList = info.values.first()
+                    it.copy(
+                        expenseInfo = expenseInfo,
+                        purchaseList = purchaseList,
+                        expenseTitle = expenseInfo.title,
+                        expenseTargetDate = expenseInfo.expenseDate
+                    )
+                }
             }
         }
     }
@@ -70,6 +71,7 @@ class UpdatePurchaseViewModel(
     ) {
         if (_state.value.expenseInfo == null) return
         viewModelScope.launch {
+            _state.update { it.copy(isShowAddDialog = false) }
             insertPurchaseUseCase(
                 PurchaseInfo(
                     expenseId = _state.value.expenseInfo!!.expenseId,

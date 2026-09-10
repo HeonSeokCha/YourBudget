@@ -11,7 +11,7 @@ import org.koin.core.annotation.Single
 class GetExpenseWithPurchasesUseCase(
     private val repository: BudgetRepository
 ) {
-    suspend operator fun invoke(expenseId: Long): Map<ExpenseInfo, List<PurchaseInfo>> {
+    operator fun invoke(expenseId: Long): Flow<Map<ExpenseInfo, List<PurchaseInfo>>> {
         return repository.getExpenseWithPurchaseInfo(expenseId)
     }
 }

@@ -24,7 +24,7 @@ abstract class ExpenseDao : BaseDao<ExpenseInfoEntity> {
           LEFT JOIN purchases_info as purchase ON expense.idx = purchase.expenseIdx
          WHERE expense.idx = :expenseId
     """)
-    abstract suspend fun getExpenseInfoWithPurchase(expenseId: Long): Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>
+    abstract fun getExpenseInfoWithPurchase(expenseId: Long): Flow<Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>>
 
     @Query("""
 
