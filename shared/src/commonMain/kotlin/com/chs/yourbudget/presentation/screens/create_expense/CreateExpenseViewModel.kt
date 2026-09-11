@@ -25,6 +25,10 @@ class CreateExpenseViewModel(
         _state.update { it.copy(isShowDateDialog = value) }
     }
 
+    fun changeStateFromAddDialog(value: Boolean) {
+        _state.update { it.copy(isShowAddDialog = value) }
+    }
+
     fun updateExpenseDate(milli: Long) {
         _state.update { it.copy(expenseDate = milli.toLocalDate()) }
     }

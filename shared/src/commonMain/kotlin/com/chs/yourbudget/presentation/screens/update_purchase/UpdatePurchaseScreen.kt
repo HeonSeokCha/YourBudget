@@ -90,7 +90,11 @@ fun UpdatePurchaseScreen(
                     state = titleTextState,
                     lineLimits = TextFieldLineLimits.SingleLine,
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Title") }
+                    label = { Text("Title") },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
