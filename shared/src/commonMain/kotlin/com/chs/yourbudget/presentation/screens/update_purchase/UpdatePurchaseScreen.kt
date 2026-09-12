@@ -36,6 +36,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +49,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chs.yourbudget.presentation.common.ItemPurchase
 import com.chs.yourbudget.util.Constants
+import com.chs.yourbudget.util.MoneyOutputTransformation
+import com.chs.yourbudget.util.digitsOnlyInputTransformation
 import org.koin.core.logger.Logger
 import kotlin.math.exp
 
@@ -60,7 +63,10 @@ fun UpdatePurchaseScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val titleTextState = rememberTextFieldState()
     var expanded by remember { mutableStateOf(false) }
-    val amountTextState = rememberTextFieldState("0")
+    val amountTextState = rememberTextFieldState()
+    val amount by remember {
+        derivedStateOf { amountTextState.text.toString().toLongOrNull() ?: 0L }
+    }
     val userNameState = rememberTextFieldState(Constants.USER_NAME_LIST.first())
 
     LaunchedEffect(state.expenseInfo?.title) {
@@ -72,99 +78,61 @@ fun UpdatePurchaseScreen(
         if (titleTextState.text.isEmpty() || titleTextState.text.isBlank()) return@LaunchedEffect
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(8.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
+                .weight(1f),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f),
-            ) {
-                OutlinedTextField(
-                    state = titleTextState,
-                    lineLimits = TextFieldLineLimits.SingleLine,
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Title") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
-                    )
+            OutlinedTextField(
+                state = titleTextState,
+                lineLimits = TextFieldLineLimits.SingleLine,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Title") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done
                 )
+            )
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-                TextButton(
-                    onClick = {},
-                    enabled = false
-                ) {
-                    Text(text = state.expenseInfo?.expenseDate.toString())
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(text = "Purchases")
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                LazyColumn {
-                    items(state.purchaseList) {
-                        ItemPurchase(
-                            purchaseInfo = it,
-                            onLonClick = {
-                                viewModel.changeStateFromDeleteDialog(
-                                    value = true,
-                                    purchaseInfo = it
-                                )
-                            }
-                        )
-                    }
-                }
+            TextButton(
+                onClick = {},
+                enabled = false
+            ) {
+                Text(text = state.expenseInfo?.expenseDate.toString())
             }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(0.4f),
-                    onClick = {
-                        viewModel.deleteExpense()
-                        onBack()
-                    }
-                ) {
-                    Text("Delete")
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "Purchases")
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            LazyColumn {
+                items(state.purchaseList) {
+                    ItemPurchase(
+                        purchaseInfo = it,
+                        onLonClick = {
+                            viewModel.changeStateFromDeleteDialog(
+                                value = true,
+                                purchaseInfo = it
+                            )
+                        }
+                    )
                 }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(0.4f),
-                    onClick = {
-                        viewModel.clickSave()
-                        onBack()
-                    }
-                ) {
-                    Text("Saved")
-                }
-
             }
         }
 
         FloatingActionButton(
             modifier = Modifier
-                .align(Alignment.BottomEnd),
+                .padding(bottom = 8.dp, end = 8.dp)
+                .align(Alignment.End),
             onClick = {
                 viewModel.changeStateFromAddDialog(true)
             }
@@ -174,7 +142,42 @@ fun UpdatePurchaseScreen(
                 null
             )
         }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.4f),
+                onClick = {
+                    viewModel.deleteExpense()
+                    onBack()
+                }
+            ) {
+                Text("Delete")
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.4f),
+                onClick = {
+                    viewModel.clickSave()
+                    onBack()
+                }
+            ) {
+                Text("Saved")
+            }
+
+        }
     }
+
 
     if (state.isShowDeleteDialog) {
         AlertDialog(
@@ -203,7 +206,7 @@ fun UpdatePurchaseScreen(
                     onClick = {
                         viewModel.insertPurchase(
                             userName = userNameState.text.toString(),
-                            amount = amountTextState.text.toString().toLong()
+                            amount = amount
                         )
                     }
                 ) {
@@ -255,13 +258,12 @@ fun UpdatePurchaseScreen(
 
                     OutlinedTextField(
                         state = amountTextState,
-                        lineLimits = TextFieldLineLimits.SingleLine,
-                        modifier = Modifier.fillMaxWidth(),
                         label = { Text("Amount") },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done
-                        )
+                        placeholder = { Text("0") },
+                        inputTransformation = digitsOnlyInputTransformation,
+                        outputTransformation = MoneyOutputTransformation,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        lineLimits = TextFieldLineLimits.SingleLine,
                     )
                 }
             }

@@ -34,10 +34,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chs.yourbudget.util.Constants
+import com.chs.yourbudget.util.MoneyOutputTransformation
+import com.chs.yourbudget.util.digitsOnlyInputTransformation
 import com.chs.yourbudget.util.toCommaString
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +62,10 @@ fun CreateExpenseScreen(
     val titleTextState = rememberTextFieldState()
 
     var expanded by remember { mutableStateOf(false) }
-    val amountTextState = rememberTextFieldState("0")
+    val amountTextState = rememberTextFieldState()
+    val amount by remember {
+        derivedStateOf { amountTextState.text.toString().toLongOrNull() ?: 0L }
+    }
     val userNameState = rememberTextFieldState(Constants.USER_NAME_LIST.first())
 
     LaunchedEffect(titleTextState.text) {
@@ -114,6 +121,9 @@ fun CreateExpenseScreen(
         }
 
         FloatingActionButton(
+            modifier = Modifier
+                .padding(bottom = 8.dp, end = 8.dp)
+                .align(Alignment.End),
             onClick = { viewModel.changeStateFromAddDialog(true) }
         ) {
             Icon(
@@ -163,9 +173,7 @@ fun CreateExpenseScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        viewModel.updatePurchaseList(
-                            userNameState.text.toString() to amountTextState.text.toString().toLong()
-                        )
+                        viewModel.updatePurchaseList(userNameState.text.toString() to amount)
                     }
                 ) {
                     Text("Add")
@@ -216,13 +224,12 @@ fun CreateExpenseScreen(
 
                     OutlinedTextField(
                         state = amountTextState,
-                        lineLimits = TextFieldLineLimits.SingleLine,
-                        modifier = Modifier.fillMaxWidth(),
                         label = { Text("Amount") },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done
-                        )
+                        placeholder = { Text("0") },
+                        inputTransformation = digitsOnlyInputTransformation,
+                        outputTransformation = MoneyOutputTransformation,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        lineLimits = TextFieldLineLimits.SingleLine,
                     )
                 }
             }

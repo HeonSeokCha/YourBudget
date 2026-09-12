@@ -40,7 +40,8 @@ class CreateExpenseViewModel(
     fun updatePurchaseList(info: Pair<String, Long>) {
         _state.update {
             it.copy(
-                purchaseList = it.purchaseList.apply { this.add(info) }
+                purchaseList = it.purchaseList.apply { this.add(info) },
+                isShowAddDialog = false
             )
         }
     }
