@@ -8,14 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Percent
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -120,16 +123,30 @@ fun CreateExpenseScreen(
             }
         }
 
-        FloatingActionButton(
+        Row(
             modifier = Modifier
                 .padding(bottom = 8.dp, end = 8.dp)
                 .align(Alignment.End),
-            onClick = { viewModel.changeStateFromAddDialog(true) }
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                null
-            )
+            FloatingActionButton(
+                onClick = { viewModel.changeStateFromDivideDialog(true) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Percent,
+                    null
+                )
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            FloatingActionButton(
+                onClick = { viewModel.changeStateFromAddDialog(true) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    null
+                )
+            }
         }
 
         Button(
@@ -174,6 +191,8 @@ fun CreateExpenseScreen(
                 TextButton(
                     onClick = {
                         viewModel.updatePurchaseList(userNameState.text.toString() to amount)
+                        userNameState.clearText()
+                        amountTextState.clearText()
                     }
                 ) {
                     Text("Add")
@@ -232,6 +251,38 @@ fun CreateExpenseScreen(
                         lineLimits = TextFieldLineLimits.SingleLine,
                     )
                 }
+            }
+        )
+    }
+
+    if (state.isShowDivideDialog) {
+        AlertDialog(
+            onDismissRequest = { viewModel.changeStateFromDivideDialog(false) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.updatePurchaseListFromDivide(amount)
+                        amountTextState.clearText()
+                    }
+                ) {
+                    Text("Add")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.changeStateFromDivideDialog(false) }) {
+                    Text("No")
+                }
+            },
+            text = {
+                OutlinedTextField(
+                    state = amountTextState,
+                    label = { Text("Amount") },
+                    placeholder = { Text("0") },
+                    inputTransformation = digitsOnlyInputTransformation,
+                    outputTransformation = MoneyOutputTransformation,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    lineLimits = TextFieldLineLimits.SingleLine,
+                )
             }
         )
     }

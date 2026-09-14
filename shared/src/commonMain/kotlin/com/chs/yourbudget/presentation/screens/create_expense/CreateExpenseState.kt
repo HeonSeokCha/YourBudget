@@ -9,5 +9,6 @@ data class CreateExpenseState(
     val expenseDate: LocalDate = Clock.System.now().toLocalDate(),
     val purchaseList: MutableList<Pair<String, Long>> = mutableListOf(),
     val isShowDateDialog: Boolean = false,
-    val isShowAddDialog: Boolean = false
+    val isShowAddDialog: Boolean = false,
+    val isShowDivideDialog: Boolean = false
 )

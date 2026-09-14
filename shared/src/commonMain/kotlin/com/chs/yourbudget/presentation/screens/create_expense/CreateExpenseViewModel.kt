@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.chs.yourbudget.domain.model.ExpenseInfo
 import com.chs.yourbudget.domain.usecases.InsertExpenseUseCase
 import com.chs.yourbudget.domain.usecases.InsertPurchaseUseCase
+import com.chs.yourbudget.util.Constants
 import com.chs.yourbudget.util.toLocalDate
 import com.chs.yourbudget.util.toLocalDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,10 @@ class CreateExpenseViewModel(
         _state.update { it.copy(isShowAddDialog = value) }
     }
 
+    fun changeStateFromDivideDialog(value: Boolean) {
+        _state.update { it.copy(isShowDivideDialog = value) }
+    }
+
     fun updateExpenseDate(milli: Long) {
         _state.update { it.copy(expenseDate = milli.toLocalDate()) }
     }
@@ -46,13 +51,26 @@ class CreateExpenseViewModel(
         }
     }
 
-    fun removePurchaseList(idx: Int) {
+    fun updatePurchaseListFromDivide(amount: Long) {
         _state.update {
             it.copy(
-                purchaseList = it.purchaseList.apply { this.removeAt(idx) }
+                purchaseList = it.purchaseList.apply {
+                    Constants.USER_NAME_LIST.forEach {
+                        this.add(it to amount / Constants.USER_NAME_LIST.count())
+                    }
+                },
+                isShowDivideDialog = false
             )
         }
     }
+
+//    fun removePurchaseList(idx: Int) {
+//        _state.update {
+//            it.copy(
+//                purchaseList = it.purchaseList.apply { this.removeAt(idx) }
+//            )
+//        }
+//    }
 
     fun clickSave() {
         if (_state.value.title == null) return

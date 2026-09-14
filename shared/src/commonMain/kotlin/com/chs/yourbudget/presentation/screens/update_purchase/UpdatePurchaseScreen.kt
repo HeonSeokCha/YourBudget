@@ -208,6 +208,8 @@ fun UpdatePurchaseScreen(
                             userName = userNameState.text.toString(),
                             amount = amount
                         )
+                        userNameState.clearText()
+                        amountTextState.clearText()
                     }
                 ) {
                     Text("Add")
