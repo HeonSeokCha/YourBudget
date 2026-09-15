@@ -19,6 +19,8 @@ import com.chs.yourbudget.presentation.screens.main.MainViewModel
 import com.chs.yourbudget.presentation.screens.create_expense.CreateExpenseViewModel
 import com.chs.yourbudget.presentation.screens.update_purchase.UpdatePurchaseScreen
 import com.chs.yourbudget.presentation.screens.update_purchase.UpdatePurchaseViewModel
+import com.chs.yourbudget.presentation.screens.user_amount.UserAmountScreen
+import com.chs.yourbudget.presentation.screens.user_amount.UserAmountViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -89,6 +91,12 @@ fun MainNavDisplay(
                 UpdatePurchaseScreen(viewModel) {
                     backStack.removeLastOrNull()
                 }
+            }
+
+            entry<BudgetScreens.ScreenUserAmount> {
+                val viewModel = koinViewModel<UserAmountViewModel>()
+
+                UserAmountScreen(viewModel)
             }
         }
     )

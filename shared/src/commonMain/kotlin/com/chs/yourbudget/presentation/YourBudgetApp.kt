@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import com.chs.yourbudget.di.KoinModule
+import com.chs.yourbudget.presentation.screens.BottomBar
 import org.koin.compose.KoinApplication
 import org.koin.plugin.module.dsl.koinConfiguration
 
@@ -30,6 +31,9 @@ fun YourBudgetApp() {
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() }
                 )
+            },
+            bottomBar = {
+                BottomBar(backStack)
             }
         ) {
             MainNavDisplay(
