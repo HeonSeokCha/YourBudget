@@ -59,7 +59,7 @@ class BudgetRepositoryImpl(
         }
     }
 
-    override suspend fun getTotalAmountByName(): Map<String, Long> {
-        return purchaseDao.getTotalAmountByUserName()
+    override suspend fun getTotalAmountByName(): List<Pair<String, Long>> {
+        return purchaseDao.getTotalAmountByUserName().toList()
     }
 }

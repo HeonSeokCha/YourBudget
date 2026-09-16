@@ -23,6 +23,7 @@ abstract class PurchaseDao : BaseDao<PurchaseInfoEntity> {
         SELECT userName, SUM(amount) as totalAmount
           FROM purchases_info
           GROUP BY userName
+          ORDER BY totalAmount DESC
     """)
     abstract suspend fun getTotalAmountByUserName(): Map<@MapColumn("userName") String, @MapColumn("totalAmount") Long>
 
