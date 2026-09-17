@@ -1,5 +1,10 @@
 package com.chs.yourbudget.util
 
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
@@ -67,5 +72,23 @@ object MoneyOutputTransformation : OutputTransformation {
             insert(index, ",")
             index -= 3
         }
+    }
+}
+
+enum class NavDirection { FORWARD, BACKWARD }
+
+fun directionalTransform(direction: NavDirection): ContentTransform {
+    return if (direction == NavDirection.FORWARD) {
+        slideInHorizontally(
+            initialOffsetX = { it }, animationSpec = tween(300)
+        ) togetherWith slideOutHorizontally(
+            targetOffsetX = { -it }, animationSpec = tween(300)
+        )
+    } else {
+        slideInHorizontally(
+            initialOffsetX = { -it }, animationSpec = tween(300)
+        ) togetherWith slideOutHorizontally(
+            targetOffsetX = { it }, animationSpec = tween(300)
+        )
     }
 }
