@@ -33,8 +33,9 @@ class UpdatePurchaseViewModel(
         viewModelScope.launch {
             getExpenseWithPurchasesUseCase(expenseId).collect { info ->
                 _state.update {
-                    val expenseInfo = info.keys.first()
-                    val purchaseList = info.values.first()
+                    val expenseInfo = info.keys.firstOrNull()
+                    val purchaseList = info.values.firstOrNull()
+                    if (expenseInfo == null || purchaseList == null) return@collect
                     it.copy(
                         expenseInfo = expenseInfo,
                         purchaseList = purchaseList,

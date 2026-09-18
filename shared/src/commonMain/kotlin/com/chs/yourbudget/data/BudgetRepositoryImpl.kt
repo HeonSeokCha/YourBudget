@@ -18,15 +18,15 @@ class BudgetRepositoryImpl(
     private val purchaseDao: PurchaseDao,
     private val expenseDao: ExpenseDao
 ) : BudgetRepository {
-    override suspend fun upsertPurchase(purchaseInfo: PurchaseInfo) {
-        purchaseDao.upsertEntity(purchaseInfo.toPurchaseInfoEntity())
+    override suspend fun upsertPurchase(vararg purchaseInfo: PurchaseInfo) {
+        purchaseDao.upsertEntity(*purchaseInfo.map { it.toPurchaseInfoEntity()}.toTypedArray())
     }
 
     override suspend fun deletePurchase(purchaseInfo: PurchaseInfo) {
         purchaseDao.deleteEntity(purchaseInfo.toPurchaseInfoEntity())
     }
 
-    override suspend fun insertExpense(expenseInfo: ExpenseInfo) {
+    override suspend fun insertExpense(expenseInfo: ExpenseInfo): Long {
         return expenseDao.upsertEntity(expenseInfo.toExpenseInfoEntity())
     }
 
@@ -53,9 +53,7 @@ class BudgetRepositoryImpl(
 
     override fun getExpenseWithPurchaseInfo(expenseId: Long): Flow<Map<ExpenseInfo, List<PurchaseInfo>>> {
         return expenseDao.getExpenseInfoWithPurchase(expenseId).map {
-            it.map {
-                it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() }
-            }.toMap()
+            it.map { it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() } }.toMap()
         }
     }
 

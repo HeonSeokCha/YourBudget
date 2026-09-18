@@ -8,7 +8,7 @@ import org.koin.core.annotation.Single
 class InsertPurchaseUseCase(
     private val repository: BudgetRepository
 ) {
-    suspend operator fun invoke(purchaseInfo: PurchaseInfo) {
-        return repository.upsertPurchase(purchaseInfo)
+    suspend operator fun invoke(vararg purchaseInfo: PurchaseInfo) {
+        return repository.upsertPurchase(*purchaseInfo)
     }
 }

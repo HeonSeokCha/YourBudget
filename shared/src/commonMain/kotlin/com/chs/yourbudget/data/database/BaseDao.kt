@@ -6,6 +6,8 @@ import androidx.room3.Upsert
 
 interface BaseDao<T> {
     @Upsert
+    suspend fun upsertEntity(entity: T): Long
+    @Upsert
     suspend fun upsertEntity(vararg entity: T)
 
     @Delete

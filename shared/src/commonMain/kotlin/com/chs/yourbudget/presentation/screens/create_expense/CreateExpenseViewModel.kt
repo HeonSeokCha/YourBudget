@@ -3,6 +3,7 @@ package com.chs.yourbudget.presentation.screens.create_expense
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chs.yourbudget.domain.model.ExpenseInfo
+import com.chs.yourbudget.domain.model.PurchaseInfo
 import com.chs.yourbudget.domain.usecases.InsertExpenseUseCase
 import com.chs.yourbudget.domain.usecases.InsertPurchaseUseCase
 import com.chs.yourbudget.util.Constants
@@ -13,11 +14,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinViewModel
+import kotlin.math.exp
 import kotlin.time.Clock
 
 @KoinViewModel
 class CreateExpenseViewModel(
-    private val insertExpenseUseCase: InsertExpenseUseCase
+    private val insertExpenseUseCase: InsertExpenseUseCase,
+    private val insertPurchaseUseCase: InsertPurchaseUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(CreateExpenseState())
     val state = _state.asStateFlow()
@@ -75,12 +78,23 @@ class CreateExpenseViewModel(
     fun clickSave() {
         if (_state.value.title == null) return
         viewModelScope.launch {
-            insertExpenseUseCase(
+            val expenseId = insertExpenseUseCase(
                 ExpenseInfo(
                     title = _state.value.title!!,
                     expenseDate = _state.value.expenseDate,
                     createTime = Clock.System.now().toLocalDateTime()
                 )
+            )
+
+            insertPurchaseUseCase(
+                *_state.value.purchaseList.map {
+                    PurchaseInfo(
+                        expenseId = expenseId,
+                        userName = it.first,
+                        amount = it.second,
+                        createAt = Clock.System.now().toLocalDateTime()
+                    )
+                }.toTypedArray()
             )
         }
     }

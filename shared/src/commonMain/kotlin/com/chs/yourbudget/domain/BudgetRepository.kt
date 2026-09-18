@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 
 interface BudgetRepository {
-    suspend fun upsertPurchase(purchaseInfo: PurchaseInfo)
+    suspend fun upsertPurchase(vararg purchaseInfo: PurchaseInfo)
     suspend fun deletePurchase(purchaseInfo: PurchaseInfo)
-    suspend fun insertExpense(expenseInfo: ExpenseInfo)
+    suspend fun insertExpense(expenseInfo: ExpenseInfo): Long
     suspend fun deleteExpense(expenseInfo: ExpenseInfo)
     suspend fun deleteExpenseWithPurchase(expenseId: Long)
     fun getAllExpense(): Flow<List<Pair<LocalDate, Long>>>
