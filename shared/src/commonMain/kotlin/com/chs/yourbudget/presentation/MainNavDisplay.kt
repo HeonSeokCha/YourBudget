@@ -46,10 +46,10 @@ fun MainNavDisplay(
                 MainScreen(
                     viewModel = viewModel,
                     onClickExpense = {
-                        backStack.addTopLevel(BudgetScreens.ScreenExpense(it))
+                        backStack.add(BudgetScreens.ScreenExpense(it))
                     },
                     onClickCreateExpense = {
-                        backStack.addTopLevel(BudgetScreens.ScreenExpenseCreate)
+                        backStack.add(BudgetScreens.ScreenExpenseCreate)
                     }
                 )
             }
@@ -61,7 +61,7 @@ fun MainNavDisplay(
                 ExpenseScreen(
                     viewModel = viewModel,
                     onClickUpdateExpense = {
-                        backStack.addTopLevel(BudgetScreens.ScreenPurchaseUpdate(it))
+                        backStack.add(BudgetScreens.ScreenPurchaseUpdate(it))
                     }
                 )
             }

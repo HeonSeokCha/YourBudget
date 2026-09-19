@@ -67,13 +67,13 @@ class CreateExpenseViewModel(
         }
     }
 
-//    fun removePurchaseList(idx: Int) {
-//        _state.update {
-//            it.copy(
-//                purchaseList = it.purchaseList.apply { this.removeAt(idx) }
-//            )
-//        }
-//    }
+    fun removePurchaseList(idx: Int) {
+        _state.update {
+            it.copy(
+                purchaseList = it.purchaseList.apply { this.removeAt(idx) }
+            )
+        }
+    }
 
     fun clickSave() {
         if (_state.value.title == null) return

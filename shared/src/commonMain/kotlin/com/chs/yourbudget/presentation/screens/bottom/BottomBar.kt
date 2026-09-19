@@ -25,7 +25,7 @@ fun BottomBar(backStack: BottomTopLevelBackStack) {
                         indicatorColor = MaterialTheme.colorScheme.primary
                     ),
                     onClick = {
-                        backStack.addTopLevel(navItem.route)
+                        backStack.add(navItem.route)
                     },
                     icon = { Icon(imageVector = navItem.icon, contentDescription = null) },
                     label = { Text(text = navItem.label) }
