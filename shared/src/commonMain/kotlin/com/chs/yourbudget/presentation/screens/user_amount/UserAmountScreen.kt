@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.chs.yourbudget.presentation.common.ItemPurchase
 import com.chs.yourbudget.util.toCommaString
 
 @Composable

@@ -15,4 +15,5 @@ interface BudgetRepository {
     fun getExpenseListFromDate(targetDate: Long): Flow<List<Pair<ExpenseInfo, Long>>>
     fun getExpenseWithPurchaseInfo(expenseId: Long): Flow<Map<ExpenseInfo, List<PurchaseInfo>>>
     suspend fun getTotalAmountByName(): List<Pair<String, Long>>
+    suspend fun getPurchasesFromName(userName: String): List<PurchaseInfo>
 }

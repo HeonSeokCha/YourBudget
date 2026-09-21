@@ -55,8 +55,7 @@ fun MainNavDisplay(
             }
 
             entry<BudgetScreens.ScreenExpense> {
-                val viewModel = koinViewModel<ExpenseViewModel> {
-                    parametersOf(it.expenseDate)
+                val viewModel = koinViewModel<ExpenseViewModel> { parametersOf(it.expenseDate)
                 }
                 ExpenseScreen(
                     viewModel = viewModel,
@@ -87,6 +86,13 @@ fun MainNavDisplay(
                 val viewModel = koinViewModel<UserAmountViewModel>()
 
                 UserAmountScreen(viewModel)
+            }
+
+            entry<BudgetScreens.ScreenUSerPurchaseList> {
+                val viewModel = koinViewModel<ExpenseViewModel> {
+                    parametersOf(it.userName)
+                }
+
             }
         }
     )

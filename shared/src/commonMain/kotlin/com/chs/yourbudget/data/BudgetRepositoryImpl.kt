@@ -60,4 +60,8 @@ class BudgetRepositoryImpl(
     override suspend fun getTotalAmountByName(): List<Pair<String, Long>> {
         return purchaseDao.getTotalAmountByUserName().toList()
     }
+
+    override suspend fun getPurchasesFromName(userName: String): List<PurchaseInfo> {
+        return purchaseDao.getPurchasesFromUserName(userName).map { it.toPurchaseInfo() }
+    }
 }
