@@ -1,11 +1,14 @@
 package com.chs.yourbudget.presentation.screens.user_amount
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.onClick
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,9 +18,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.chs.yourbudget.util.toCommaString
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UserAmountScreen(
-    viewModel: UserAmountViewModel
+    viewModel: UserAmountViewModel,
+    onUserClick: (String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -29,7 +34,11 @@ fun UserAmountScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(32.dp),
+                    .height(32.dp)
+                    .onClick(
+                        enabled = true,
+                        onClick = { onUserClick(it.first) }
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = it.first, fontSize = 16.sp)

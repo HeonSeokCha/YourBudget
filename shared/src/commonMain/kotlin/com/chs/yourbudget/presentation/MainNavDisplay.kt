@@ -18,6 +18,8 @@ import com.chs.yourbudget.presentation.screens.update_purchase.UpdatePurchaseScr
 import com.chs.yourbudget.presentation.screens.update_purchase.UpdatePurchaseViewModel
 import com.chs.yourbudget.presentation.screens.user_amount.UserAmountScreen
 import com.chs.yourbudget.presentation.screens.user_amount.UserAmountViewModel
+import com.chs.yourbudget.presentation.screens.user_purchases.UserPurchasesScreen
+import com.chs.yourbudget.presentation.screens.user_purchases.UserPurchasesViewModel
 import com.chs.yourbudget.util.NavDirection
 import com.chs.yourbudget.util.directionalTransform
 import org.koin.compose.viewmodel.koinViewModel
@@ -85,14 +87,20 @@ fun MainNavDisplay(
             entry<BudgetScreens.ScreenUserAmount> {
                 val viewModel = koinViewModel<UserAmountViewModel>()
 
-                UserAmountScreen(viewModel)
+                UserAmountScreen(
+                    viewModel = viewModel,
+                    onUserClick = {
+                        backStack.add(BudgetScreens.ScreenUserPurchases(it))
+                    }
+                )
             }
 
-            entry<BudgetScreens.ScreenUSerPurchaseList> {
-                val viewModel = koinViewModel<ExpenseViewModel> {
+            entry<BudgetScreens.ScreenUserPurchases> {
+                val viewModel = koinViewModel<UserPurchasesViewModel> {
                     parametersOf(it.userName)
                 }
 
+                UserPurchasesScreen(viewModel)
             }
         }
     )

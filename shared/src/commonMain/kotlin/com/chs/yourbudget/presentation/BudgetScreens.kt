@@ -25,7 +25,7 @@ sealed interface BudgetScreens: NavKey {
     data object ScreenUserAmount : BudgetScreens
 
     @Serializable
-    data class ScreenUSerPurchases(val userName: String) : BudgetScreens
+    data class ScreenUserPurchases(val userName: String) : BudgetScreens
 }
 
 enum class BottomNavigation(
