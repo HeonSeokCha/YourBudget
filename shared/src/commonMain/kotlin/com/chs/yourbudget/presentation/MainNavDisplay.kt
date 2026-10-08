@@ -86,7 +86,6 @@ fun MainNavDisplay(
 
             entry<BudgetScreens.ScreenUserAmount> {
                 val viewModel = koinViewModel<UserAmountViewModel>()
-
                 UserAmountScreen(
                     viewModel = viewModel,
                     onUserClick = {

@@ -9,7 +9,7 @@ import org.koin.core.annotation.Single
 class GetPurchasesFromUserUseCase(
     private val repository: BudgetRepository
 ) {
-    suspend operator fun invoke(userName: String): Map<LocalDate, List<PurchaseInfo>> {
+    suspend operator fun invoke(userName: String): List<Pair<LocalDate, List<PurchaseInfo>>> {
         return repository.getPurchasesFromName(userName)
     }
 }
