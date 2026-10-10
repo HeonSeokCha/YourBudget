@@ -18,10 +18,10 @@ abstract class PurchaseDao : BaseDao<PurchaseInfoEntity> {
     abstract suspend fun deleteFromExpenseId(expenseId: Long)
 
     @Query("""
-        SELECT a.expenseDate, b.*
+        SELECT *
           FROM expense_info as A
           LEFT JOIN purchases_info as b ON a.idx = b.expenseIdx
          WHERE b.userName = :userName
     """)
-    abstract suspend fun getPurchasesFromUserName(userName: String): Map<@MapColumn("expenseDate") Long, List<PurchaseInfoEntity>>
+    abstract suspend fun getPurchasesFromUserName(userName: String): Map<ExpenseInfoEntity, List<PurchaseInfoEntity>>
 }

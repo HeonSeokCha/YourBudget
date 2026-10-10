@@ -44,13 +44,13 @@ fun UserPurchasesScreen(
                 .fillMaxSize()
         ) {
             state.purchaseList.forEach { item ->
-                stickyHeader {
-                    Text(text = item.first.toString())
+                stickyHeader(key = item.key) {
+                    Text(text = item.key.expenseDate.toString())
 
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                items(item.second) {
+                items(item.value) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

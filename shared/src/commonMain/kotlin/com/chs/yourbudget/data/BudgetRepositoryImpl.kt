@@ -61,9 +61,9 @@ class BudgetRepositoryImpl(
         return purchaseDao.getTotalAmountByUserName().toList()
     }
 
-    override suspend fun getPurchasesFromName(userName: String): List<Pair<LocalDate, List<PurchaseInfo>>> {
+    override suspend fun getPurchasesFromName(userName: String): List<Pair<ExpenseInfo, List<PurchaseInfo>>> {
         return purchaseDao.getPurchasesFromUserName(userName).map {
-            it.key.toLocalDate() to it.value.map { it.toPurchaseInfo() }
-        }.sortedBy { it.first }
+            it.key.toExpenseInfo() to it.value.map { it.toPurchaseInfo() }
+        }.sortedBy { it.first.expenseId }
     }
 }
