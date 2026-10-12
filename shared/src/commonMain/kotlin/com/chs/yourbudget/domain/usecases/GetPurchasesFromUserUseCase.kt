@@ -10,8 +10,10 @@ import org.koin.core.annotation.Single
 class GetPurchasesFromUserUseCase(
     private val repository: BudgetRepository
 ) {
-    suspend operator fun invoke(userName: String): LinkedHashMap<ExpenseInfo, List<PurchaseInfo>> {
-        return repository.getPurchasesFromName(userName).sortedByDescending { it.first.expenseId }
-            .toMap(LinkedHashMap())
+    suspend operator fun invoke(userName: String): List<Pair<LocalDate, List<Pair<ExpenseInfo, List<PurchaseInfo>>>>> {
+        return repository.getPurchasesFromName(userName)
+            .groupBy { it.first.expenseDate }
+            .toList()
+            .sortedByDescending { it.first }
     }
 }

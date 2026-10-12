@@ -6,5 +6,5 @@ import kotlinx.datetime.LocalDate
 
 data class UserPurchasesState(
     val userName: String? = null,
-    val purchaseList: LinkedHashMap<ExpenseInfo, List<PurchaseInfo>> = linkedMapOf()
+    val purchaseList: List<Pair<LocalDate, List<Pair<ExpenseInfo, List<PurchaseInfo>>>>> = listOf()
 )

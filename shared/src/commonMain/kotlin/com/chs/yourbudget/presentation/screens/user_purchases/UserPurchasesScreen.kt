@@ -1,6 +1,8 @@
 package com.chs.yourbudget.presentation.screens.user_purchases
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,25 +43,31 @@ fun UserPurchasesScreen(
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             state.purchaseList.forEach { item ->
-                stickyHeader(key = item.key) {
-                    Text(text = item.key.expenseDate.toString())
+                stickyHeader(key = item.first) {
+                    Text(text = item.first.toString())
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
 
-                items(item.value) {
+                items(item.second) {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(
-                            text = it.amount.toCommaString()
-                        )
+                        Text(text = it.first.title)
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Column {
+                            it.second.forEach {
+                                Text(text = it.amount.toCommaString())
+
+                                Spacer(modifier = Modifier.height(4.dp))
+                            }
+                        }
                     }
                 }
             }
